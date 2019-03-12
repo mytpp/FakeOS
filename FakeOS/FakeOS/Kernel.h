@@ -22,7 +22,7 @@ namespace kernel
 	constexpr auto kScheduleInterval = 1s;
 
 	//how often the CPU thread is waken
-	constexpr auto kCPUCycle = 100ms;
+	constexpr auto kCPUCycle = 200ms;
 
 	//memory related
 	constexpr size_t kPageSize = 4 * 1024; // 4 KiB
@@ -34,9 +34,8 @@ namespace kernel
 	constexpr size_t kMaxPagesPerProcess = kAddressSpacePerProcess / kPageSize;
 
 	//used in PCB
-	constexpr size_t kMaxProcessNameLength = 60;
-
-
+	//filesystem should also check this
+	constexpr size_t kMaxPathLength = 252; 
 
 	//global instances' access point
 	extern std::unique_ptr<ProcessScheduler> processScheduler;

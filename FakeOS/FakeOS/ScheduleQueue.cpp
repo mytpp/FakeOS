@@ -1,10 +1,16 @@
 #include "ScheduleQueue.h"
 
+using namespace std;
 
 namespace ScheduleQueue
 {
-	std::mutex readyQueueMutex;
+	mutex newlyCreatedQueueMutex;
+	mutex readyQueueMutex;
+	mutex waitingQueueMutex;
 
-
-	std::mutex waitingQueueMutex;
+	void LoadProcess(const string& path, Priority priority)
+	{
+		//create PCB
+		//put PCB in newlyCreatedQueueMutex
+	}
 }

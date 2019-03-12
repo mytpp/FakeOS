@@ -1,4 +1,5 @@
 #include "ProcessScheduler.h"
+#include "ScheduleQueue.h"
 #include <cassert>
 
 using namespace std;
@@ -45,9 +46,14 @@ void ProcessScheduler::threadFunc()
 {
 	while (!_quit)
 	{
-		unique_lock<std::mutex> lock(_mutex);
-		_condition.wait(lock, [this] { return _waken.load(); });
+		unique_lock conditionLock(_mutex);
+		_condition.wait(conditionLock, [this] { return _waken.load(); });
 		
+		scoped_lock queueLock(
+			ScheduleQueue::newlyCreatedQueueMutex, 
+			ScheduleQueue::readyQueueMutex,
+			ScheduleQueue::waitingQueueMutex
+		);
 		//code here
 		//algorithm for scheduling 
 		//switch...case...

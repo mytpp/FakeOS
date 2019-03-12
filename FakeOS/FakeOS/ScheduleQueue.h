@@ -2,6 +2,7 @@
 
 #include "Kernel.h"
 #include <cstdint>
+#include <string>
 #include <array>
 #include <mutex>
 
@@ -12,8 +13,8 @@ namespace ScheduleQueue
 		kNew,
 		kRunning,
 		kWaiting,
-		kReady
-		//kTerminated
+		kReady,
+		kTerminated
 	};
 	enum Priority: uint8_t
 	{
@@ -40,16 +41,39 @@ namespace ScheduleQueue
 	using PageNumber = size_t;
 	using PageTable = std::array<std::pair<PageNumber, PageStatus>, kernel::kMaxPagesPerProcess>;
 
+
+	//--------------------------------------------------------------------------
+	//								IMPORTANT
+	// Only CPUCore can modify a process's PCB, ProcessScheduler is not allowed.
+	// Only ProcessScheduler can modify those *Queue, CPUCore is not allowed.
+	//--------------------------------------------------------------------------
+
 	struct PCB
-	{
-		char name[kernel::kMaxProcessNameLength]; //60
+	{	
+		//prohibit copying
+		//PCB should can only be accessed by pointer
+		PCB(const PCB&) = delete; 
+
+		//process's name can be extracted from path
+		std::string path; //28
+		//use std::string because we don't know the exact size at compile time
 		uint16_t pid; //2
 		State state;  //1
-		Priority priority;//1
+		Priority priority; //1
+		std::string textSegment; //28
+		//Not real program counter like what were taoght in OS course,
+		//this means how many CPU cycle is left before executing next 
+		//directive. Initial value is 0.
+		size_t programCounter; //4
 		Statistics statistics; //16
 		PageTable pageTable;
 		//open-file table
 	};
+	//int a = sizeof(std::string); //DEBUG
+	
+	
+	//priority may be specified from command line
+	void LoadProcess(const std::string& path, Priority priority);
 
 
 	//Didn't encapsulate a thread-safe Queue, because it's to hard to predicate
@@ -62,6 +86,7 @@ namespace ScheduleQueue
 
 	extern std::mutex readyQueueMutex;
 	//data structure for readyQueue...
+	//the head of readyQueue's state is kRunning
 
 	extern std::mutex waitingQueueMutex;
 	//data structure for waitingQueue...

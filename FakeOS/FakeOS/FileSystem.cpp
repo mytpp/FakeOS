@@ -15,8 +15,14 @@ public:
 	bool addChild(const string& name);
 	bool eraseChild(const string& name);
 
+	//add its and all its forefathers' _lockCount
+	void lock();
+
 private:
 	enum :uint8_t { kFile, kDirectory } _type;
+	//if a process in current directory is running, then all nodes 
+	//in the process's path are locked, i.e. couldn't be deleted.
+	std::atomic<uint8_t> _lockCount; 
 	string _name;
 	unique_ptr<INode> _parent;
 	list<unique_ptr<INode>> _children;
@@ -38,6 +44,8 @@ FileSystem::FileSystem()
 	, _thread(nullptr, kernel::ThreadDeleter)
 {
 }
+
+FileSystem::~FileSystem() = default;
 
 
 void FileSystem::start()

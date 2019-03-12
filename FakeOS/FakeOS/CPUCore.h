@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Kernel.h"
+#include "ScheduleQueue.h"
+#include <vector>
 #include <atomic>
+#include <future>
 
 
 //this class starts a new thread
@@ -19,7 +21,13 @@ public:
 private:
 	void threadFunc();
 
+	struct IOChannel
+	{
+		std::unique_ptr<ScheduleQueue::PCB> pcb;
+		std::future<bool> event;
+	};
 
+	std::vector<IOChannel> _ioChannel;
 	std::atomic<bool> _quit;
 	kernel::ThreadPtr _thread;
 };
