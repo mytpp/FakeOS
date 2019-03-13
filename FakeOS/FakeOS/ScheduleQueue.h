@@ -3,6 +3,7 @@
 #include "Kernel.h"
 #include <cstdint>
 #include <string>
+#include <map>
 #include <array>
 #include <mutex>
 
