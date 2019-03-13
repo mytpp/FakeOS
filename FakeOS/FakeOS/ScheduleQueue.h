@@ -32,28 +32,28 @@ namespace ScheduleQueue
 		std::chrono::time_point<std::chrono::steady_clock> timeCreated; // sizeof(timeCreated) == 8
 		std::chrono::steady_clock::duration usedCPUTime; // sizeof(usedCPUTime) == 8
 	};
-	enum PageStatus: uint8_t
+
+	struct PageTableEntry
 	{
-		kInMemory,
-		kOndisk,
-		kNotUsed
+		size_t pageNumber;
+		bool free;     //if is's true, the three fields below are invalid
+		bool inMemory; //false means 'on disk'
+		bool begin;    //is beginning of a block of virtual memory
+		bool end;      //is end of a block of virtual memory, used by MemoryManager::virtualFree
 	};
-	using PageNumber = size_t;
-	using PageTable = std::array<std::pair<PageNumber, PageStatus>, kernel::kMaxPagesPerProcess>;
+	using PageTable = std::array<PageTableEntry, kernel::kMaxPagesPerProcess>;
 
 
 	//--------------------------------------------------------------------------
 	//								IMPORTANT
-	// Only CPUCore can modify a process's PCB, ProcessScheduler is not allowed.
-	// Only ProcessScheduler can modify those *Queue, CPUCore is not allowed.
+	// Only CPUCore and MemoryManager can modify a process's PCB, ProcessScheduler 
+	// is not allowed.
+	// Only ProcessScheduler can modify those *Queue, CPUCore and MemoryManager
+	// is not allowed.
 	//--------------------------------------------------------------------------
 
-	struct PCB
-	{	
-		//prohibit copying
-		//PCB should can only be accessed by pointer
-		PCB(const PCB&) = delete; 
-
+	struct PCB  //non-copyable
+	{
 		//process's name can be extracted from path
 		std::string path; //28
 		//use std::string because we don't know the exact size at compile time
@@ -66,10 +66,11 @@ namespace ScheduleQueue
 		//directive. Initial value is 0.
 		size_t programCounter; //4
 		Statistics statistics; //16
-		PageTable pageTable;
+		std::map<std::string, size_t> allocatedMemory; //12
+		std::unique_ptr<PageTable> pageTable; //4
 		//open-file table
 	};
-	//int a = sizeof(std::string); //DEBUG
+	//int a = sizeof(PCB); //DEBUG
 	
 	
 	//priority may be specified from command line

@@ -8,20 +8,24 @@ Course work for OS
 
 A mocked process is a text file like a kind of script language. A sample process 'script' is as follows:
 ```
-5 DemandMemory 12345
+# priority (optional)
+5 DemandMemory 12345 As addr1
 2 CreateFile newfilename some initial content
 3 DeleteFile existingfilename
 ```
-explanation:   
-Each line represents a directive. Each lexical symbol is seperated by blankspace.
+Explanation:   
+The first line indicate the priority of the process. Default priority is 'Normal'.
+Each line below represents a directive. Each lexical symbol is seperated by blankspace.
 In a single line, the first symbol (a number) represent the time (how many CPU cycle) 
 elapsed since the last directive executed. The second symbol represents what kind of 
 directive will be executed. The extra symbols represents parameters that the directive needs. 
-The interpreter will discard unrecognizable directive.    
-Now totally 3 commands are supported:   
+The interpreter will discard unrecognizable directives.    
+Now totally 3 directives are supported:   
 
-Command      | params
--------------|--------
-DemandMemory | size
-CreateFile   | filename + initial content
-DeleteFile   | filename
+Directive                     | var1        | var2
+------------------------------|-------------|-------------------------
+DemandMemory (var1) As (var2) | size        | number of the start page (this value will be stored in PCB), and can be used by FreeMemory and AccessMemory
+FreeMemory (var1)             | start page  |
+AccessMemory (var1)           | page number |
+CreateFile (var1) (var2)      | filename    | initial content
+DeleteFile (var1)             | filename    |

@@ -16,6 +16,7 @@ class FileSystem;
 namespace kernel
 {
 	using namespace std::chrono_literals;
+
 	//some constant
 	
 	//how often the ProcessScheduler is waken
@@ -25,17 +26,16 @@ namespace kernel
 	constexpr auto kCPUCycle = 200ms;
 
 	//memory related
-	constexpr size_t kPageSize = 4 * 1024; // 4 KiB
-	constexpr size_t kPhysicalMemorySize = 128 * 1024 * 1024; //128 MiB ?
-	constexpr size_t kSwapAreaSize = 128 * 1024 * 1024; //always same as above
-	//total available virtual memory == kPhysicalMemorySize + kSwapAreaSize;
-	constexpr size_t kNumPages = (kPhysicalMemorySize + kSwapAreaSize) / kPageSize;
-	constexpr size_t kAddressSpacePerProcess = 16 * 1024 * 1024; //16 MiB ?
-	constexpr size_t kMaxPagesPerProcess = kAddressSpacePerProcess / kPageSize;
+	constexpr size_t kPageSize               = 4 * 1024;    // 4 KiB
+	constexpr size_t kPhysicalMemorySize     = 1024 * 1024; // 1 MiB ?
+	constexpr size_t kSwapAreaSize           = 1024 * 1024; //always same as above
+	constexpr size_t kAddressSpacePerProcess = 256 * 1024;  // 256 KiB ?
 
-	//used in PCB
-	//filesystem should also check this
-	constexpr size_t kMaxPathLength = 252; 
+	//total available virtual memory == kPhysicalMemorySize + kSwapAreaSize;
+	constexpr size_t kNumPages = (kPhysicalMemorySize + kSwapAreaSize) / kPageSize; // =512
+	constexpr size_t kMaxPagesPerProcess = kAddressSpacePerProcess / kPageSize; // =64
+
+
 
 	//global instances' access point
 	extern std::unique_ptr<ProcessScheduler> processScheduler;

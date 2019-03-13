@@ -1,13 +1,13 @@
-#include "MemoryAllocator.h"
+#include "MemoryManager.h"
 
 using namespace std;
 
 
-MemoryAllocator::MemoryAllocator()
+MemoryManager::MemoryManager()
 {
 }
 
 
-MemoryAllocator::~MemoryAllocator()
+MemoryManager::~MemoryManager()
 {
 }

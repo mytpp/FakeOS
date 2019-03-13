@@ -31,7 +31,7 @@ public:
 
 	//this function doesn't need to pack IORequestPacket
 	//because 'where is current path' is stored only in memory
-	void changeDirectory(const std::string& path);
+	bool changeDirectory(const std::string& path);
 
 	//functions below call _condition.notify() at the end
 
@@ -98,7 +98,7 @@ private:
 			RemoveFileParams
 		> params;
 	};
-	//int a = sizeof CreateFileParams;
+	
 
 	fs::path _absoluteRootPath;
 	std::unique_ptr<INode> _root;

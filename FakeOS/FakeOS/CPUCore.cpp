@@ -1,6 +1,6 @@
 #include "CPUCore.h"
 #include "ProcessScheduler.h"
-#include "MemoryAllocator.h"
+#include "MemoryManager.h"
 #include "FileSystem.h"
 #include <cassert>
 

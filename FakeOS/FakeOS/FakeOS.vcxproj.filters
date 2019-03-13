@@ -47,13 +47,13 @@
     <ClInclude Include="CPUCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryAllocator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ProcessScheduler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScheduleQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

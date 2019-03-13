@@ -128,7 +128,7 @@
     <ClInclude Include="CPUCore.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Kernel.h" />
-    <ClInclude Include="MemoryAllocator.h" />
+    <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="ProcessScheduler.h" />
     <ClInclude Include="ScheduleQueue.h" />
   </ItemGroup>
