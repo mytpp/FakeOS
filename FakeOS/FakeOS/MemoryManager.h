@@ -2,7 +2,14 @@
 
 #include "Kernel.h"
 #include <mutex>
-#include <map>
+#include <vector>
+#include <list>
+#include <unordered_map>
+#include <unordered_set>
+
+namespace ScheduleQueue {
+	struct PCB;
+}
 
 class MemoryManager
 {
@@ -10,25 +17,49 @@ public:
 	MemoryManager();
 	~MemoryManager();
 
-	//allocate by page.
-	//returning false indicates out of memory
-	//the allocated memory may or may not be in memory
-	bool virtualAllocate(/*IN*/ size_t size, /*OUT*/ int& startPage);
+	//Allocate by page.
+	//Returning false indicates out of memory/
+	//If it returns true, startPage is the start page number of allocated memory.
+	//The allocated memory may or may not be in memory.
+	bool virtualAllocate(
+		/*IN*/ std::shared_ptr<ScheduleQueue::PCB> pcb,
+		/*IN*/ const size_t size, 
+		/*OUT*/ int& startPage); //page number of process address space
 
-	//returning false indicates memory violation
-	bool virtualFree(size_t startPage);
+	//startPage is the page number of process address space to free.
+	//Returning false indicates memory violation.
+	bool virtualFree(
+		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t startPage);
 
 	//may cause page fault, and it's the only place that can cause page fault
-	bool accessMemory(size_t pageNumber);
+	bool accessMemory(
+		std::shared_ptr<ScheduleQueue::PCB> pcb, size_t pageNumber);
+
 
 private:
-	size_t usedMemoryPages;
-	size_t usedSwapAreaPages;
-
-	mutable std::mutex _mutex;
+	mutable std::mutex _mutex; // protect all data below
 	
-	//data structure for LRU
-	//...
+	struct PageInfoEntry
+	{
+		PageInfoEntry(size_t frame, size_t page, std::shared_ptr<ScheduleQueue::PCB> pcb)
+			:frameNumber(frame), pageNumber(page), owner(pcb) { }
 
+		size_t frameNumber;
+		size_t pageNumber;  //in user address space
+		std::shared_ptr<ScheduleQueue::PCB> owner;
+	};
+
+	//data structure for LRU
+
+	//Sorted by recent used time.
+	//The front is the least recently used, the back is the most recently used
+	std::list<PageInfoEntry> _frames; 
+	std::list<PageInfoEntry>::iterator _nextToAllocate;
+	size_t _freeMemoryPagesNum;
+	//map frame number to its location in _frames;
+	std::unordered_map<size_t, std::list<PageInfoEntry>::iterator> _frameLocator;
+	
+	//size_t _freeSwapAreaPagesNum; //==_freeSwapAreaPages.size() at most time
+	std::unordered_set<size_t> _freeSwapAreaPages;
 };
 

@@ -20,7 +20,7 @@ In a single line, the first symbol (a number) represent the time (how many CPU c
 elapsed since the last directive executed. The second symbol represents what kind of 
 directive will be executed. The extra symbols represents parameters that the directive needs. 
 The interpreter will discard unrecognizable directives.    
-Now totally 3 directives are supported:   
+Now totally 5 directives are supported:   
 
 Directive                     | var1        | var2
 ------------------------------|-------------|-------------------------

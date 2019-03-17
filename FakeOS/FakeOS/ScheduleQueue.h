@@ -36,14 +36,14 @@ namespace ScheduleQueue
 
 	struct PageTableEntry
 	{
-		size_t pageNumber;
-		bool free;     //if is's true, the three fields below are invalid
+		size_t pageNumber; //mapped page # of physical memory or swap area
+		bool free;     //if is's true, all other fields are invalid
 		bool inMemory; //false means 'on disk'
-		bool begin;    //is beginning of a block of virtual memory
-		bool end;      //is end of a block of virtual memory, used by MemoryManager::virtualFree
+		bool isBegin;  //is beginning of a block of virtual memory
+		bool isEnd;    //is end of a block of virtual memory, used by MemoryManager::virtualFree
 	};
 	using PageTable = std::array<PageTableEntry, kernel::kMaxPagesPerProcess>;
-
+	//the address space that a process sees is flat memory model
 
 	//--------------------------------------------------------------------------
 	//								IMPORTANT
