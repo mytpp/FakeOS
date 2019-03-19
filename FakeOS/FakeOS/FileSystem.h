@@ -31,7 +31,7 @@ public:
 
 	//this function doesn't need to pack IORequestPacket
 	//because 'where is current path' is stored only in memory
-	bool changeDirectory(const std::string& path);
+	bool changeDirectory(const std::string& path);	
 
 	//functions below call _condition.notify() at the end
 
@@ -61,6 +61,7 @@ public:
 
 	//cd ..
 	std::future<bool> demand_back();
+	std::future<bool> demand_cd(const string &name);
 
 private:
 	void threadFunc();
@@ -114,5 +115,6 @@ private:
 
 	std::atomic<bool> _quit;
 	kernel::ThreadPtr _thread;
+	list<shared_ptr<INode>>::iterator _itr_node;
 };
 
