@@ -83,39 +83,57 @@ void FileSystem::quit()
 
 std::future<bool> FileSystem::createFile(const std::string & name, const std::string & path, const std::string & content)
 {
+	std::unique_lock<std::mutex> lck(_mutex);
+	_condition.wait(lck);
+
 	CreateFileParams param = { name, _workingDirectory->getPath() + "/" + name, content };
 	IORequestPacket packet = { kCreateFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
 	auto reqpack = make_pair(packet, proObj);
 	_messageQueue.push(reqpack);
+
+	_condition.notify_all();
 	return proObj.get_future();
 }
 
 std::future<bool> FileSystem::createDirectory(const std::string & name, const std::string & path)
 {
+	std::unique_lock<std::mutex> lck(_mutex);
+	_condition.wait(lck);
+
 	CreateFileParams param = { name, _workingDirectory->getPath() + "/" + name };
 	IORequestPacket packet = { kMakeDirectory, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
 	auto reqpack = make_pair(packet, proObj);
 	_messageQueue.push(reqpack);
+
+	_condition.notify_all();
 	return proObj.get_future();
 }
 
 std::future<bool> FileSystem::removeFile(const std::string & name, const std::string & path)
 {
+	std::unique_lock<std::mutex> lck(_mutex);
+	_condition.wait(lck);
+
 	CreateFileParams param = { name, _workingDirectory->getPath() };
 	IORequestPacket packet = { kDeleteFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
 	auto reqpack = make_pair(packet, proObj);
 	_messageQueue.push(reqpack);
+
+	_condition.notify_all();
 	return proObj.get_future();
 }
 
 std::future<bool> FileSystem::demand_back()
 {
+	std::unique_lock<std::mutex> lck(_mutex);
+	_condition.wait(lck);
+
 	bool ifback;
 	if (_workingDirectory != _root)
 		ifback = false;
@@ -124,7 +142,7 @@ std::future<bool> FileSystem::demand_back()
 	std::future<bool> result = std::async(std::launch::async, [ifback]() {
 		return ifback;
 	});
-
+	_condition.notify_all();
 	return result;
 }
 
