@@ -3,6 +3,8 @@
 #include "MemoryManager.h"
 #include "FileSystem.h"
 #include <cassert>
+#include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -10,8 +12,58 @@ bool ParseAndDoDirective(const string& directive)
 {
 	//interact with MemoryAllocator and FileSystem
 	//code here...
+	stringstream ss(directive);
+	string word;
+	//int len = directive.length();
+	//int numind = directive.find(' ');
+	//if (numind == string::npos)
+	//	return false;
+	//int time=atoi(directive.substr(0, numind).c_str());
+	if (!(ss >> word))return false;
+	int time = atoi(word.c_str());
+	if (time < 0)
+		return false;
+	if (!(ss >> word))return false;
+	string curd_d = word;
+	if (curd_d == "DemandMemory")
+	{
+		if (!(ss >> word))return false;
+		int var1 = atoi(word.c_str());
+		if (!(ss >> word) || word != "As")return false;
+		if (!(ss >> word))return false;
+		int var2 = atoi(word.c_str());
+		// process
+	}
+	else if (curd_d == "FreeMemory")
+	{
+		if (!(ss >> word))return false;
+		int var1 = atoi(word.c_str());
+		// process
+	}
+	else if (curd_d == "AccessMemory")
+	{
+		if (!(ss >> word))return false;
+		int var1 = atoi(word.c_str());
+		// process
+	}
+	else if (curd_d == "CreateFile")
+	{
+		if (!(ss >> word))return false;
+		string filename = word;
+		int ind = directive.find(word);
+		string content = directive.substr(ind + word.length());
+		//process
+	}
+	else if (curd_d == "DeleteFile")
+	{
+		if (!(ss >> word))return false;
+		string filename = word;
+		//process
+	}
+	else
+		return false;//if directive is unrecognizable
 
-	return false; //if directive is unrecognizable
+	return true; 
 }
 
 CPUCore::CPUCore()
