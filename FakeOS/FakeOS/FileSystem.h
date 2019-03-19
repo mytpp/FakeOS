@@ -59,6 +59,9 @@ public:
 	//std::future<bool> copyFile();
 	//std::future<bool> copyDirectory();
 
+	//cd ..
+	std::future<bool> demand_back();
+
 private:
 	void threadFunc();
 
@@ -66,7 +69,7 @@ private:
 	
 	enum Method: uint8_t
 	{
-		kCreateFile,
+		kCreateFile	,
 		kDeleteFile,
 		kMakeDirectory
 	};
@@ -88,21 +91,21 @@ private:
 		std::string path;
 	};
 
-	struct IORequestPacket
+	struct IORequestPacket	
 	{
-		Method method;
-		std::string workingDirectory;
+		Method method;	//type of request 
 		std::variant<
 			CreateFileParams, 
-			CreateDirectoryParams, 
+			CreateDirectoryParams,
 			RemoveFileParams
 		> params;
+		shared_ptr<INode> workingDirectory;	//	parent path
 	};
 	
 
 	fs::path _absoluteRootPath;
-	std::unique_ptr<INode> _root;
-	std::unique_ptr<INode> _workingDirectory; //'cd' command changes this
+	std::shared_ptr<INode> _root;
+	std::shared_ptr<INode> _workingDirectory; //'cd' and 'cd..' command changes this
 
 	std::mutex _mutex;
 	std::condition_variable _condition;
