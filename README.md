@@ -5,7 +5,18 @@ Course work for OS
 * x86
 
 ***
+command line support:  
+* cd /absolute/path (relative to the default path that is set for FakeOS.exe )
+* cd relative/relative (relative to current working directory)
+* cd ..
+* cf FileName ["initial content"]
+* af FileName "appended content"
+* md NewDirectoryName
+* rm FileName
+* rm DirectoryName
+* ./ProcessScript [priority]
 
+***
 A mocked process is a text file like a kind of script language. A sample process 'script' is as follows:
 ```
 # priority (optional)

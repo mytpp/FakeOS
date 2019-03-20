@@ -18,12 +18,14 @@ public:
 		std::shared_ptr<INode> child(rawchild);
 		_children.push_back(child);
 		//build file in disk
+		return true;
 	}
 	bool eraseChild(const string& name) {
 		for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++) {
 			if ((*_itr_node)->_name == name) 
 				_children.erase(_itr_node);
 		}
+		return true;
 	}
 	shared_ptr<INode> getParent() {
 		return _parent.lock();
@@ -35,7 +37,7 @@ public:
 		return _children;
 	}
 	string getname() {
-		return _name
+		return _name;
 	}
 
 
@@ -96,8 +98,8 @@ std::future<bool> FileSystem::createFile(const std::string & name, const std::st
 	IORequestPacket packet = { kCreateFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
-	auto reqpack = make_pair(packet, proObj);
-	_messageQueue.push(reqpack);
+	//auto reqpack = make_pair(packet, proObj);
+	_messageQueue.emplace(packet, std::move(proObj));
 
 	_condition.notify_all();
 	return proObj.get_future();
@@ -112,8 +114,8 @@ std::future<bool> FileSystem::createDirectory(const std::string & name, const st
 	IORequestPacket packet = { kMakeDirectory, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
-	auto reqpack = make_pair(packet, proObj);
-	_messageQueue.push(reqpack);
+	//auto reqpack = make_pair(packet, proObj);
+	_messageQueue.emplace(packet, std::move(proObj));
 
 	_condition.notify_all();
 	return proObj.get_future();
@@ -128,8 +130,8 @@ std::future<bool> FileSystem::removeFile(const std::string & name, const std::st
 	IORequestPacket packet = { kDeleteFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
-	auto reqpack = make_pair(packet, proObj);
-	_messageQueue.push(reqpack);
+	//auto reqpack = make_pair(packet, proObj);
+	_messageQueue.emplace(packet, std::move(proObj));
 	
 	_condition.notify_all();
 	return proObj.get_future();
@@ -159,7 +161,7 @@ std::future<bool> FileSystem::demand_cd(const string &name)
 	std::unique_lock<std::mutex> lck(_mutex);
 	bool ifexist = false;
 	for (_itr_node = _workingDirectory->getChildren().begin(); _itr_node != _workingDirectory->getChildren().end(); _itr_node++) {
-		if ((*_itr_node)->getname == name) {
+		if ((*_itr_node)->getname() == name) {
 			ifexist = true;
 			_workingDirectory = (*_itr_node);
 		}
@@ -190,7 +192,7 @@ void FileSystem::threadFunc()
 				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifexist = false;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
-					if ((*_itr_node)->getname == param.name) {
+					if ((*_itr_node)->getname() == param.name) {
 						request.second.set_value(false);
 						ifexist = true;
 						break;
@@ -206,7 +208,7 @@ void FileSystem::threadFunc()
 				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifdel = true;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
-					if ((*_itr_node)->getname == param.name) {
+					if ((*_itr_node)->getname() == param.name) {
 						op.workingDirectory->eraseChild(param.name);
 						request.second.set_value(true);
 						ifdel = false;
@@ -221,7 +223,7 @@ void FileSystem::threadFunc()
 				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifexist = false;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
-					if ((*_itr_node)->getname == param.name) {
+					if ((*_itr_node)->getname() == param.name) {
 						request.second.set_value(false);
 						ifexist = true;
 						break;

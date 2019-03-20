@@ -61,7 +61,7 @@ public:
 
 	//cd ..
 	std::future<bool> demand_back();
-	std::future<bool> demand_cd(const string &name);
+	std::future<bool> demand_cd(const std::string &name);
 
 private:
 	void threadFunc();
@@ -100,7 +100,7 @@ private:
 			CreateDirectoryParams,
 			RemoveFileParams
 		> params;
-		shared_ptr<INode> workingDirectory;	//	parent path
+		std::shared_ptr<INode> workingDirectory;	//	parent path
 	};
 	
 
@@ -115,6 +115,6 @@ private:
 
 	std::atomic<bool> _quit;
 	kernel::ThreadPtr _thread;
-	list<shared_ptr<INode>>::iterator _itr_node;
+	std::list<std::shared_ptr<INode>>::iterator _itr_node;
 };
 
