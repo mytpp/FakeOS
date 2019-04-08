@@ -21,7 +21,6 @@ public:
 
 	void start();
 	void quit();
-
 	//Lock current path
 	void lockPath();
 	//Unlock a path. It's called when a mocked process died.
@@ -31,7 +30,7 @@ public:
 
 	//this function doesn't need to pack IORequestPacket
 	//because 'where is current path' is stored only in memory
-	bool changeDirectory(const std::string& path);	
+	//bool changeDirectory(const std::string& path);	
 
 	//functions below call _condition.notify() at the end
 
@@ -39,29 +38,24 @@ public:
 	[[nodiscard]] 
 	std::future<bool> createFile(
 		const std::string& name, 
-		const std::string& path,  //like '/parent/path'
-		const std::string& content = "");
+		const std::string& content);
 	
 	//create a directory at current directory
 	[[nodiscard]]
-	std::future<bool> createDirectory(
-		const std::string& name,
-		const std::string& path);  //like '/parent/path'
+	std::future<bool> createDirectory(const std::string& name);
 
 	//delete a file at current directory
 	[[nodiscard]]
-	std::future<bool> removeFile(
-		const std::string& name,
-		const std::string& path);  //like '/parent/path'
+	std::future<bool> removeFile(const std::string& name); 
 		
-	//std::future<bool> rename();
-	//std::future<bool> removeDirectory();
+	std::future<bool> rename(const std::string& oldname, const std::string& newname);
 	//std::future<bool> copyFile();
 	//std::future<bool> copyDirectory();
 
 	//cd ..
-	std::future<bool> demand_back();
-	std::future<bool> demand_cd(const std::string &name);
+	std::future<bool> back();
+	//cd
+	std::future<bool> load(const std::string &name);
 
 private:
 	void threadFunc();
@@ -72,33 +66,41 @@ private:
 	{
 		kCreateFile	,
 		kDeleteFile,
-		kMakeDirectory
+		kMakeDirectory,
+		kRename
 	};
 
 	struct CreateFileParams
 	{
 		std::string name;
-		std::string path;
+		std::string fpath;
 		std::string content;
 	};
 	struct CreateDirectoryParams
 	{
 		std::string name;
-		std::string path;
+		std::string fpath;
 	};
 	struct RemoveFileParams
 	{
 		std::string name;
-		std::string path;
+		std::string fpath;
+	};
+	struct RenameParams
+	{
+		std::string oldname;
+		std::string newname;
+		std::string fpath;
 	};
 
 	struct IORequestPacket	
 	{
 		Method method;	//type of request 
-		std::variant<
-			CreateFileParams, 
+		std::variant <
+			CreateFileParams,
 			CreateDirectoryParams,
-			RemoveFileParams
+			RemoveFileParams,
+			RenameParams
 		> params;
 		std::shared_ptr<INode> workingDirectory;	//	parent path
 	};
