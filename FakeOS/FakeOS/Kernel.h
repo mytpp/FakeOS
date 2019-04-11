@@ -9,7 +9,7 @@ namespace std {
 }
 
 class ProcessScheduler;
-class MemoryAllocator;
+class MemoryManager;
 class CPUCore;
 class FileSystem;
 
@@ -40,7 +40,7 @@ namespace kernel
 
 	//global instances' access point
 	extern std::unique_ptr<ProcessScheduler> processScheduler;
-	extern std::unique_ptr<MemoryAllocator> memoryAllocator;
+	extern std::unique_ptr<MemoryManager> memoryManager;
 	extern std::unique_ptr<CPUCore> cpuCore;
 	extern std::unique_ptr<FileSystem> fileSystem;
 
