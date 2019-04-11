@@ -4,6 +4,7 @@
 #include <vector>
 #include <atomic>
 #include <future>
+#include "Kernel.h"
 
 
 //this class starts a new thread

@@ -7,6 +7,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace kernel;
 
 bool ParseAndDoDirective(const string& directive)
 {
@@ -33,18 +34,21 @@ bool ParseAndDoDirective(const string& directive)
 		if (!(ss >> word))return false;
 		int var2 = atoi(word.c_str());
 		// process
+
 	}
 	else if (curd_d == "FreeMemory")
 	{
 		if (!(ss >> word))return false;
 		int var1 = atoi(word.c_str());
 		// process
+
 	}
 	else if (curd_d == "AccessMemory")
 	{
 		if (!(ss >> word))return false;
 		int var1 = atoi(word.c_str());
 		// process
+
 	}
 	else if (curd_d == "CreateFile")
 	{
@@ -53,12 +57,14 @@ bool ParseAndDoDirective(const string& directive)
 		int ind = directive.find(word);
 		string content = directive.substr(ind + word.length());
 		//process
+
 	}
 	else if (curd_d == "DeleteFile")
 	{
 		if (!(ss >> word))return false;
 		string filename = word;
 		//process
+		
 	}
 	else
 		return false;//if directive is unrecognizable
