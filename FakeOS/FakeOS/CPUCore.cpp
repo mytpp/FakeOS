@@ -34,21 +34,21 @@ bool ParseAndDoDirective(const string& directive)
 		if (!(ss >> word))return false;
 		int var2 = atoi(word.c_str());
 		// process
-
+		memoryManager.virtualAllocate(_ioChannel.pcb,var1,var2);
 	}
 	else if (curd_d == "FreeMemory")
 	{
 		if (!(ss >> word))return false;
 		int var1 = atoi(word.c_str());
 		// process
-
+		memoryManager.virtualFree(_ioChannel.pcb,var1);
 	}
 	else if (curd_d == "AccessMemory")
 	{
 		if (!(ss >> word))return false;
 		int var1 = atoi(word.c_str());
 		// process
-
+		memoryManager.accessMemory(_ioChannel.pcb,var1);
 	}
 	else if (curd_d == "CreateFile")
 	{
@@ -57,14 +57,14 @@ bool ParseAndDoDirective(const string& directive)
 		int ind = directive.find(word);
 		string content = directive.substr(ind + word.length());
 		//process
-
+		fileSystem.createFile(filename,content);
 	}
 	else if (curd_d == "DeleteFile")
 	{
 		if (!(ss >> word))return false;
 		string filename = word;
 		//process
-		
+		fileSystem.removeFile(filename);
 	}
 	else
 		return false;//if directive is unrecognizable

@@ -3,6 +3,7 @@
 #include "ProcessScheduler.h"
 #include "MemoryManager.h"
 #include "FileSystem.h"
+#include "Command.h"
 #include <iostream>
 
 
@@ -31,8 +32,11 @@ int main()
 	//After initialization finished, main thread runs as cmd parser.
 	while (true)
 	{
+		string cmd;
 		//there should be a command prompt like '>' or '$'
-
+		cout << "Please input your command:" << endl;
+		getline(cin, cmd);
+		ExplainCmd(cmd);
 		//parse command and execute
 
 	}
