@@ -8,7 +8,8 @@ using namespace std;
 
 
 ProcessScheduler::ProcessScheduler(Method method)
-	:_waken(false)
+	:_scheduleMethod(method)
+	,_waken(false)
 	,_quit(false)
 	,_thread(nullptr, kernel::ThreadDeleter)
 {

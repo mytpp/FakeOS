@@ -1,11 +1,7 @@
 #pragma once
 
 #include "Kernel.h"
-#include <mutex>
-#include <vector>
-#include <list>
-#include <unordered_map>
-#include <unordered_set>
+
 
 namespace ScheduleQueue {
 	struct PCB;
@@ -14,52 +10,22 @@ namespace ScheduleQueue {
 class MemoryManager
 {
 public:
-	MemoryManager();
-	~MemoryManager();
+	MemoryManager() {};
+	virtual ~MemoryManager() {}
 
-	//Allocate by page.
 	//Returning false indicates out of memory/
-	//If it returns true, startPage is the start page number of allocated memory.
-	//The allocated memory may or may not be in memory.
-	bool virtualAllocate(
+	//If it returns true, 'start' is the starting loaction of allocated memory.
+	virtual bool virtualAllocate(
 		/*IN*/ std::shared_ptr<ScheduleQueue::PCB> pcb,
-		/*IN*/ const size_t size, 
-		/*OUT*/ int& startPage); //page number of process address space
+		/*IN*/ const size_t size,
+		/*IN OUT*/ size_t& start) = 0; //start of allocated memory
 
-	//startPage is the page number of process address space to free.
+	//'start' is the starting location of memory to free.
 	//Returning false indicates memory violation.
-	bool virtualFree(
-		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t startPage);
+	virtual bool virtualFree(
+		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t start) = 0;
 
-	//may cause page fault, and it's the only place that can cause page fault
-	bool accessMemory(
-		std::shared_ptr<ScheduleQueue::PCB> pcb, size_t pageNumber);
-
-
-private:
-	mutable std::mutex _mutex; // protect all data below
-	
-	struct PageInfoEntry
-	{
-		PageInfoEntry(size_t frame, size_t page, std::shared_ptr<ScheduleQueue::PCB> pcb)
-			:frameNumber(frame), pageNumber(page), owner(pcb) { }
-
-		size_t frameNumber;
-		size_t pageNumber;  //in user address space
-		std::shared_ptr<ScheduleQueue::PCB> owner;
-	};
-
-	//data structure for LRU
-
-	//Sorted by recent used time.
-	//The front is the least recently used, the back is the most recently used
-	std::list<PageInfoEntry> _frames; 
-	std::list<PageInfoEntry>::iterator _nextToAllocate;
-	size_t _freeMemoryPagesNum;
-	//map frame number to its location in _frames;
-	std::unordered_map<size_t, std::list<PageInfoEntry>::iterator> _frameLocator;
-	
-	//size_t _freeSwapAreaPagesNum; //==_freeSwapAreaPages.size() at most time
-	std::unordered_set<size_t> _freeSwapAreaPages;
+	virtual bool accessMemory(
+		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t location) = 0;
 };
 

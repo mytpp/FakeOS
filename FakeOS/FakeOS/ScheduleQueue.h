@@ -69,6 +69,7 @@ namespace ScheduleQueue
 		Statistics statistics; //16
 		std::map<std::string, size_t> allocatedMemory; //12
 		std::unique_ptr<PageTable> pageTable; //4
+		//ptr to segment table
 		//open-file table
 	};
 	//int a = sizeof(PCB); //DEBUG

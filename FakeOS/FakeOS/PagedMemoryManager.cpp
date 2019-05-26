@@ -1,4 +1,4 @@
-#include "MemoryManager.h"
+#include "PagedMemoryManager.h"
 #include "ScheduleQueue.h"
 #include <cassert>
 #include <numeric> 
@@ -8,7 +8,7 @@ using namespace std;
 using namespace kernel;
 using namespace ScheduleQueue;
 
-MemoryManager::MemoryManager()
+PagedMemoryManager::PagedMemoryManager()
 	:_mutex()
 	//,_frames(kMemoryPages)
 	//,_nextToAllocate(_frames.begin())
@@ -25,16 +25,14 @@ MemoryManager::MemoryManager()
 		_freeSwapAreaPages.insert(i + kMemoryPages);
 }
 
+PagedMemoryManager::~PagedMemoryManager() = default;
 
-MemoryManager::~MemoryManager()
-{
-}
 
 //complexity O(kMaxPagesPerProcess + size / kPageSize)
-bool MemoryManager::virtualAllocate(
+bool PagedMemoryManager::virtualAllocate(
 	std::shared_ptr<PCB> pcb,
 	const size_t size,
-	int& startPage)
+	size_t& startPage)
 {
 	//assert(0 < size); // refuse to allocate if size<=0
 	if (size <= 0 || kMaxPagesPerProcess < size)
@@ -124,8 +122,9 @@ bool MemoryManager::virtualAllocate(
 	return true;
 }
 
+
 //complexity O(endPage - startPage)
-bool MemoryManager::virtualFree(
+bool PagedMemoryManager::virtualFree(
 	std::shared_ptr<PCB> pcb, const size_t startPage)
 {
 	auto& pageTable = *(pcb->pageTable);
@@ -165,8 +164,9 @@ bool MemoryManager::virtualFree(
 }
 
 
-bool MemoryManager::accessMemory(
-	std::shared_ptr<ScheduleQueue::PCB> pcb, size_t pageNumber)
+//complexity O(1)
+bool PagedMemoryManager::accessMemory(
+	std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t pageNumber)
 {
 	auto& pageTableEntry = (*(pcb->pageTable))[pageNumber];
 	if (pageTableEntry.free)
@@ -178,7 +178,7 @@ bool MemoryManager::accessMemory(
 		_freeSwapAreaPages.insert(pageTableEntry.pageNumber);
 		if (_nextToAllocate != _frames.end())
 		{//memory is not full
-			_nextToAllocate->owner == pcb;
+			_nextToAllocate->owner = pcb;
 			pageTableEntry.pageNumber = _nextToAllocate->frameNumber;
 			pageTableEntry.inMemory = true;
 		}
