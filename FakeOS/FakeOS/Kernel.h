@@ -20,7 +20,7 @@ namespace kernel
 	//some constant
 	
 	//how often the ProcessScheduler is waken
-	constexpr auto kScheduleInterval = 1s;
+	constexpr auto kScheduleInterval = 5;
 
 	//how often the CPU thread is waken
 	constexpr auto kCPUCycle = 200ms;

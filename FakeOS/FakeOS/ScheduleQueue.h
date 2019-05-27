@@ -29,9 +29,9 @@ namespace ScheduleQueue
 	};
 	struct Statistics
 	{
-		//to calculate how long the process has lived
-		std::chrono::time_point<std::chrono::steady_clock> timeCreated; // sizeof(timeCreated) == 8
-		std::chrono::steady_clock::duration usedCPUTime; // sizeof(usedCPUTime) == 8
+		//logical time: to calculate how long the process has lived
+		int64_t timeCreated;
+		int64_t usedCPUTime;
 	};
 
 	struct PageTableEntry

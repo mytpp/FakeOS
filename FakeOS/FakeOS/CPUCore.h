@@ -21,6 +21,7 @@ public:
 
 private:
 	void threadFunc();
+	bool ParseAndDoDirective(const std::string& directive);
 
 	struct IOChannel
 	{
@@ -31,5 +32,6 @@ private:
 	std::vector<IOChannel> _ioChannel;
 	std::atomic<bool> _quit;
 	kernel::ThreadPtr _thread;
+	int64_t _timeElapsed;
 };
 

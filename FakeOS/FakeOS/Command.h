@@ -1,5 +1,6 @@
 #include <string>
 
+using namespace std;
 //remove blanks from input string
 string trim(string s)
 {

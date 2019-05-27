@@ -9,7 +9,62 @@
 using namespace std;
 using namespace kernel;
 
-bool ParseAndDoDirective(const string& directive)
+
+CPUCore::CPUCore()
+	:_quit(false)
+	,_thread(nullptr, kernel::ThreadDeleter)
+	,_timeElapsed(0)
+{
+}
+
+CPUCore::~CPUCore()
+{
+}
+
+void CPUCore::start()
+{
+	assert(!_thread);
+	_quit = false;
+	_thread.reset(new thread(
+		bind(&CPUCore::threadFunc, this)
+	));
+}
+
+void CPUCore::quit()
+{
+	_quit = true;
+}
+
+void CPUCore::threadFunc()
+{
+	while (!_quit)
+	{
+		//periodically wake up processScheduler
+		if (_timeElapsed % kScheduleInterval == 0)
+			processScheduler->wakeUp();
+		
+		{//critical section
+			scoped_lock lock(ScheduleQueue::readyQueueMutex);
+
+			//peek the top element of kernel::readyQueue
+			//if programCounter reach 0, call ParseAndDoDirective()
+
+		}
+
+		{//critical section
+			scoped_lock lock(ScheduleQueue::waitingQueueMutex);
+
+			//poll _ioChannel to see if there is IO event ready,
+			//and change the corresponding PCB's state to ready
+
+		}
+
+		this_thread::sleep_for(kernel::kCPUCycle);
+		_timeElapsed++;
+	}
+}
+
+bool CPUCore::ParseAndDoDirective(const string& directive)
 {
 	//interact with MemoryAllocator and FileSystem
 	//code here...
@@ -34,21 +89,21 @@ bool ParseAndDoDirective(const string& directive)
 		if (!(ss >> word))return false;
 		int var2 = atoi(word.c_str());
 		// process
-		memoryManager.virtualAllocate(_ioChannel.pcb,var1,var2);
+		//memoryManager->virtualAllocate(_ioChannel.pcb, var1, var2);
 	}
 	else if (curd_d == "FreeMemory")
 	{
 		if (!(ss >> word))return false;
 		int var1 = atoi(word.c_str());
 		// process
-		memoryManager.virtualFree(_ioChannel.pcb,var1);
+		//memoryManager->virtualFree(_ioChannel.pcb, var1);
 	}
 	else if (curd_d == "AccessMemory")
 	{
 		if (!(ss >> word))return false;
 		int var1 = atoi(word.c_str());
 		// process
-		memoryManager.accessMemory(_ioChannel.pcb,var1);
+		//memoryManager->accessMemory(_ioChannel.pcb, var1);
 	}
 	else if (curd_d == "CreateFile")
 	{
@@ -57,70 +112,18 @@ bool ParseAndDoDirective(const string& directive)
 		int ind = directive.find(word);
 		string content = directive.substr(ind + word.length());
 		//process
-		fileSystem.createFile(filename,content);
+		fileSystem->createFile(filename, content);
 	}
 	else if (curd_d == "DeleteFile")
 	{
 		if (!(ss >> word))return false;
 		string filename = word;
 		//process
-		fileSystem.removeFile(filename);
+		fileSystem->removeFile(filename);
 	}
 	else
 		return false;//if directive is unrecognizable
 
-	return true; 
+	return true;
 }
 
-CPUCore::CPUCore()
-	:_quit(false)
-	,_thread(nullptr, kernel::ThreadDeleter)
-{
-}
-
-
-CPUCore::~CPUCore()
-{
-}
-
-void CPUCore::start()
-{
-	assert(!_thread);
-	_quit = false;
-	_thread.reset(new thread(
-		bind(&CPUCore::threadFunc, this)
-	));
-}
-
-void CPUCore::quit()
-{
-	_quit = true;
-}
-
-void CPUCore::threadFunc()
-{
-	while (!_quit)
-	{
-		this_thread::sleep_for(kernel::kCPUCycle);
-		
-		//if (reach kScheduleInterval)
-		//wake up ProcessScheduler
-		
-		{//critical section
-			scoped_lock lock(ScheduleQueue::readyQueueMutex);
-
-			//peek the top element of kernel::readyQueue
-			//if programCounter reach 0, call ParseAndDoDirective()
-
-		}
-
-		{//critical section
-			scoped_lock lock(ScheduleQueue::waitingQueueMutex);
-
-			//poll _ioChannel to see if there is IO event ready,
-			//and change the corresponding PCB's state to ready
-
-		}
-		
-	}
-}

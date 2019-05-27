@@ -1,7 +1,7 @@
 #include "Kernel.h"
 #include "CPUCore.h"
 #include "ProcessScheduler.h"
-#include "MemoryManager.h"
+#include "PagedMemoryManager.h"
 #include "FileSystem.h"
 #include "Command.h"
 #include <iostream>
@@ -21,7 +21,7 @@ int main()
 	kernel::processScheduler->start();
 	cout << "Process scheduler loaded." << endl;
 
-	kernel::memoryAllocator = make_unique<MemoryAllocator>();
+	kernel::memoryManager = make_unique<PagedMemoryManager>();
 	cout << "Memory allocator loaded." << endl;
 
 	kernel::cpuCore = make_unique<CPUCore>();
@@ -34,7 +34,7 @@ int main()
 	{
 		string cmd;
 		//there should be a command prompt like '>' or '$'
-		cout << "Please input your command:" << endl;
+		cout << ">>";
 		getline(cin, cmd);
 		ExplainCmd(cmd);
 		//parse command and execute
