@@ -75,8 +75,8 @@ namespace ScheduleQueue
 	//int a = sizeof(PCB); //DEBUG
 	
 	
-	//priority may be specified from command line
-	void LoadProcess(const std::string& path, Priority priority);
+	//load process into newlyCreatedQueue
+	void LoadProcess(const std::string& path);
 
 
 	//Didn't encapsulate a thread-safe Queue, because it's to hard to predicate

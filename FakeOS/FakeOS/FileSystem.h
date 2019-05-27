@@ -3,6 +3,7 @@
 #include "Kernel.h"
 #include <string>
 #include <array>
+#include <vector>
 #include <queue>
 #include <atomic>
 #include <future>
@@ -32,12 +33,21 @@ public:
 	//because 'where is current path' is stored only in memory
 	//bool changeDirectory(const std::string& path);	
 
+	//ls
+	std::vector<std::string> list();
+
 	//functions below call _condition.notify() at the end
 
 	//create a file at current directory
 	[[nodiscard]] 
 	std::future<bool> createFile(
 		const std::string& name, 
+		const std::string& content);
+
+	//append some content to a file
+	[[nodiscard]]
+	std::future<bool> appendFile(
+		const std::string& name,
 		const std::string& content);
 	
 	//create a directory at current directory

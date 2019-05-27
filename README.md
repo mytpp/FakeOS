@@ -6,6 +6,8 @@ Course work for OS
 
 ***
 command line support:  
+* q  (quit)
+* ls
 * cd /absolute/path (relative to the default path that is set for FakeOS.exe )
 * cd relative/relative (relative to current working directory)
 * cd ..
