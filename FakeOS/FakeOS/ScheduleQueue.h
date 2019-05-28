@@ -42,7 +42,20 @@ namespace ScheduleQueue
 		bool isBegin;  //is beginning of a block of virtual memory
 		bool isEnd;    //is end of a block of virtual memory, used by MemoryManager::virtualFree
 	};
+    struct SegmentTableEntry
+    {
+        size_t base;//段基址
+        size_t segmentSize;//段大小
+    }
+    struct MemoryStateEntry
+    {
+        bool free;//available?
+        bool isBegin;
+        bool isEnd;
+    }
 	using PageTable = std::array<PageTableEntry, kernel::kMaxPagesPerProcess>;
+    using SegmentTable = std::array<SegmentTableEntry, kernel::kMaxSegmentNum>;
+    using MemoryState = std::array<MemoryStateEntry, kernel::kMemoryBlocks>;// find out available memory
 	//the address space that a process sees is flat memory model
 
 	//--------------------------------------------------------------------------
@@ -69,7 +82,8 @@ namespace ScheduleQueue
 		Statistics statistics; //16
 		std::map<std::string, size_t> allocatedMemory; //12
 		std::unique_ptr<PageTable> pageTable; //4
-		//ptr to segment table
+        //ptr to segment table
+		std::unique_ptr<SegmentTable> segmentTable;
 		//open-file table
 	};
 	//int a = sizeof(PCB); //DEBUG
