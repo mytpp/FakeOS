@@ -33,13 +33,13 @@ public:
 	std::string getPath() {
 		return _path;
 	}
-	list<shared_ptr<INode>> getChildren() {
+	std::list<shared_ptr<INode>> getChildren() {
 		return _children;
 	}
-	string getName() {
+	std::string getName() {
 		return _name;
 	}
-	void setName(const string & name) {
+	void setName(const std::string & name) {
 		_name = name;
 	}
 
@@ -58,12 +58,12 @@ private:
 	//if a process in current directory is running, then all nodes 
 	//in the process's path are locked, i.e. couldn't be deleted.
 	std::atomic<uint8_t> _lockCount;
-	string _name;
+	std::string _name;
 	ftype _type;
 	std::string _path;
 	weak_ptr<INode> _parent;
-	list<shared_ptr<INode>> _children;
-	list<shared_ptr<INode>>::iterator _itr_node;
+	std::list<shared_ptr<INode>> _children;
+	std::list<shared_ptr<INode>>::iterator _itr_node;
 };
 
 FileSystem::INode::INode(string name, std::string fpath, ftype type)
@@ -305,7 +305,7 @@ void FileSystem::threadFunc()
 
 			if (op.method == kCreateFile) {
 				CreateFileParams param = std::get<CreateFileParams>(op.params);
-				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
+				std::list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifexist = false;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name) {
@@ -322,7 +322,7 @@ void FileSystem::threadFunc()
 			}
 			else if (op.method == kDeleteFile) {
 				RemoveFileParams param = std::get<RemoveFileParams>(op.params);
-				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
+				std::list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifdel = true;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name) {
@@ -338,7 +338,7 @@ void FileSystem::threadFunc()
 			}
 			else if (op.method == kMakeDirectory) {
 				CreateDirectoryParams param = std::get<CreateDirectoryParams>(op.params);
-				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
+				std::list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifexist = false;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name) {
@@ -355,7 +355,7 @@ void FileSystem::threadFunc()
 			}
 			else if (op.method == kRename){
 				RenameParams param = std::get<RenameParams>(op.params);
-				list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
+				std::list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifexist = false;
 				bool ifrepeat = false;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
