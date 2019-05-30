@@ -14,25 +14,9 @@ SegmentedMemoryManager::SegmentedMemoryManager()
 {
     
 }
-////,_frames(kMemoryPages)
-////,_nextToAllocate(_frames.begin())
-////,_freeMemoryPagesNum(kMemoryPages)
-////,_frameLocator()
-////, _freeSwapAreaPagesNum(kSwapAreaPages)
-////,_freeSwapAreaPages()
-//{
-//    for (size_t i = 0; i < kMemoryPages; i++)
-//        _frames.emplace_back(i, 0, nullptr);
-//    for (auto frameIt=_frames.begin(); frameIt!=_frames.end(); frameIt++)
-//        _frameLocator[(*frameIt).frameNumber] = frameIt;
-//    for (size_t i = 0; i < kSwapAreaPages; i++)
-//        _freeSwapAreaPages.insert(i + kMemoryPages);
-//}
-
 SegmentedMemoryManager::~SegmentedMemoryManager() = default;
 
 
-//complexity O(kMaxPagesPerProcess + size / kPageSize)
 bool SegmentedMemoryManager::virtualAllocate(
                                          std::shared_ptr<PCB> pcb,
                                          const size_t size,
@@ -41,106 +25,99 @@ bool SegmentedMemoryManager::virtualAllocate(
     //assert(0 < size); // refuse to allocate if size<=0
     if (size <= 0 || kMaxSegmentSize < size)
         return false;
+    if (start > kMaxSegmentNum) return false;
     
     int toAllocate = 0;
     auto& segmentTable = *(pcb->segmentTable);
+	auto& memoryState = *(ScheduleQueue::memoryState);
     size_t spaceNeeded = size;
     size_t segmentNum = start; // findout which segment of the process demand for spaces
     //critical section starts
     scoped_lock lock(_mutex);
-    //if (pagesNeeded > _freeMemoryPagesNum + _freeSwapAreaPages.size())
-    //    return false;
-    
-    
-    //update number of free pages
-    if (pagesNeeded <= _freeMemoryPagesNum)
-        _freeMemoryPagesNum -= pagesNeeded;
+    size_t blocksNeeded = spaceNeeded % kUnitMemoryblock  == 0 ?
+    spaceNeeded /kUnitMemoryblock : spaceNeeded / kUnitMemoryblock + 1;
+	auto& segmentTableEntry = segmentTable[segmentNum];
+	int baseBlock = segmentTableEntry.base / kUnitMemoryblock;
+	auto& memoryEntry = memoryState[baseBlock];
+    //if the segment has already been allocated
+    if(segmentTableEntry.segmentSize != 0)
+    {
+        while(0 < blocksNeeded)
+        {
+            if( !memoryEntry.free ) return false;//no enough room for new memory command
+            blocksNeeded-- ;
+        }
+        for(int i = baseBlock; i <= baseBlock + blocksNeeded ;i++)
+        {
+            
+            memoryState[i].free = false;
+            if(i == 1)
+                memoryState[i].isBegin = true;
+            else memoryState[i].isBegin = false;
+            if(i == blocksNeeded)
+                memoryState[i].isEnd  = true;
+            else memoryState[i].isEnd  = false;
+        }
+        segmentTableEntry.segmentSize += blocksNeeded * kUnitMemoryblock;
+        start = segmentTableEntry.segmentSize;
+        return true;
+    }
     else
-        _freeMemoryPagesNum = 0;
-    
-    //try to commit physical memory
-    while (0 < spaceNeeded)
     {
-        size_t frameNumber = _nextToAllocate->frameNumber;
-        auto pageTableEntry = pageTable[toAllocate];
-        
-        //update pcb's page table
-        segmentTableEntry.segmentNumber = frameNumber;
-        pageTableEntry.free = false;
-        pageTableEntry.isBegin = false;
-        pageTableEntry.isEnd = false;
-        pageTableEntry.inMemory = true;
-        
-        //adjust _frames and _frameLocator
-        _nextToAllocate->pageNumber = toAllocate;
-        _nextToAllocate->owner = pcb;
-        _frameLocator[frameNumber] = _nextToAllocate;
-        _nextToAllocate++;
-        
-        toAllocate++;
-        pagesNeeded--;
+        toAllocate = blocksNeeded;
+		for (baseBlock = 0; baseBlock < ( kMemoryBlocks - blocksNeeded); baseBlock++ )
+        {
+            if(!memoryState[baseBlock].free) {
+                toAllocate = blocksNeeded;
+                baseBlock++;
+            }
+            if (toAllocate == 0)
+            {
+				segmentTableEntry.base = baseBlock * kUnitMemoryblock;
+				segmentTableEntry.segmentSize = spaceNeeded;
+                for(int j = baseBlock; j <= baseBlock + blocksNeeded ;j++)
+                {
+                    
+                    memoryState[j].free = false;
+                    if(j == baseBlock)
+                        memoryState[j].isBegin = true;
+                    else memoryState[j].isBegin = false;
+                    if(j == baseBlock + blocksNeeded)
+                        memoryState[j].isEnd  = true;
+                    else memoryState[j].isEnd  = false;
+                }
+				start = segmentTableEntry.segmentSize;
+                return true;
+            }
+            toAllocate--;
+        }
+        return false;
     }
-    
-    assert(pagesNeeded <= _freeSwapAreaPages.size());
-    while (0 < pagesNeeded)
-    {
-        auto pageTableEntry = pageTable[toAllocate];
-        
-        //update pcb's page table
-        pageTableEntry.pageNumber = *(_freeSwapAreaPages.begin());
-        pageTableEntry.free = false;
-        pageTableEntry.isBegin = false;
-        pageTableEntry.isEnd = false;
-        pageTableEntry.inMemory = false;
-        
-        _freeSwapAreaPages.erase(_freeSwapAreaPages.begin());
-        toAllocate++;
-        pagesNeeded--;
-    }
-    pageTable[startPage].isBegin = true;
-    pageTable[startPage + pagesNeeded - 1].isEnd = true;
-    
-    return true;
 }
 
 
 //complexity O(endPage - startPage)
 bool SegmentedMemoryManager::virtualFree(
-                                     std::shared_ptr<PCB> pcb, const size_t startPage)
+                                     std::shared_ptr<PCB> pcb, const size_t start)
 {
-    auto& pageTable = *(pcb->pageTable);
-    if (!pageTable[startPage].isBegin)
+    auto& segmentTable = *(pcb->segmentTable);
+    size_t baseBlock = segmentTable[start].base % kUnitMemoryblock == 0?
+    segmentTable[start].base / kUnitMemoryblock : segmentTable[start].base / kUnitMemoryblock + 1;
+    auto& memoryEntry = memoryState[baseBlock];
+    if (!memoryEntry.isBegin)
         return false;
     
-    size_t i = startPage - 1;
+    size_t i = baseBlock - 1;
     
     //critical section starts
     scoped_lock lock(_mutex);
     do
     {
         i++;
-        pageTable[i].free = true;
-        if (pageTable[i].inMemory)
-        {
-            auto frame = _frameLocator[pageTable[i].pageNumber];
-            bool adjust = false;
-            //execution order is important
-            if (_nextToAllocate == _frames.end())
-                adjust = true;
-            _frames.emplace_back(frame->frameNumber, 0, nullptr);
-            if (adjust)
-                _nextToAllocate = --_frames.end();
-            
-            _frameLocator.erase(frame->frameNumber);
-            _frames.erase(frame);
-            _freeMemoryPagesNum++;
-        }
-        else //pageTable[i] in swap area
-        {
-            _freeSwapAreaPages.insert(pageTable[i].pageNumber);
-        }
-    } while (!pageTable[i].isEnd);
-    
+        memoryEntry[i].free = true;
+    } while (!memoryEntry[i].isEnd);
+    segmentTable[start].base = 0;
+    segmentTable[start].segmentSize = 0;
     return true;
 }
 

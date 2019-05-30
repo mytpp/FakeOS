@@ -46,16 +46,16 @@ namespace ScheduleQueue
     {
         size_t base;//段基址
         size_t segmentSize;//段大小
-    }
+	};
     struct MemoryStateEntry
     {
         bool free;//available?
         bool isBegin;
         bool isEnd;
-    }
+	};
 	using PageTable = std::array<PageTableEntry, kernel::kMaxPagesPerProcess>;
     using SegmentTable = std::array<SegmentTableEntry, kernel::kMaxSegmentNum>;
-    using MemoryState = std::array<MemoryStateEntry, kernel::kMemoryBlocks>;// find out available memory
+    using MemoryState = std::array<MemoryStateEntry, kernel::kMemoryBlocks>;
 	//the address space that a process sees is flat memory model
 
 	//--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ namespace ScheduleQueue
 		//open-file table
 	};
 	//int a = sizeof(PCB); //DEBUG
-	
+	extern std::unique_ptr<MemoryState> memoryState;// find out available memory
 	
 	//load process into newlyCreatedQueue
 	void LoadProcess(const std::string& path);
@@ -98,6 +98,7 @@ namespace ScheduleQueue
 	//algorithm.
 	//Store (smart) pointer of PCB in those queues to avoid unnecessary copies
 
+	
 	extern std::mutex newlyCreatedQueueMutex;
 	//data structure for newlyCreatedQueue...
 

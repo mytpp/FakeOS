@@ -28,9 +28,9 @@ namespace kernel
 	//memory related
 	constexpr size_t kPageSize               = 4 * 1024;    // 4 KiB
     constexpr size_t kMaxSegmentSize         = 64 * 1024;//64 KiB
-    constexpr size_t kMaxSegmentNum          = 16
+	constexpr size_t kMaxSegmentNum          = 16;
 	constexpr size_t kMemorySize             = 1024 * 1024; // 1 MiB ?
-    constexpr size_t kUnitMemoryblock        = 1024      //dived the memory into many blocks with same size
+	constexpr size_t kUnitMemoryblock        = 1024;      //dived the memory into many blocks with same size
 	constexpr size_t kSwapAreaSize           = 1024 * 1024; //always same as above
 	constexpr size_t kAddressSpacePerProcess = 256 * 1024;  // 256 KiB ?
 
@@ -38,7 +38,7 @@ namespace kernel
 	constexpr size_t kMemoryPages = kMemorySize / kPageSize; // =256
 	constexpr size_t kSwapAreaPages = kSwapAreaSize / kPageSize; // =256
 	constexpr size_t kMaxPagesPerProcess = kAddressSpacePerProcess / kPageSize; // =64
-    constexpr size_t kMemoryBlocks = kMemorySize / kUnitMemoryblock //1024
+	constexpr size_t kMemoryBlocks = kMemorySize / kUnitMemoryblock; //1024
     
 
 

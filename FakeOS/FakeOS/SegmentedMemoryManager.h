@@ -29,8 +29,8 @@ public:
                      std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t start) override;
     
     //may cause page fault, and it's the only place that can cause page fault
-    bool accessMemory(
-                      std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t segmentNumber, const size_t offset)
+	bool accessMemory(
+		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t segmentNumber, const size_t offset);
     
     
 private:
