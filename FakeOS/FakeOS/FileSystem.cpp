@@ -13,8 +13,8 @@ public:
 	~INode();
 	void buildDirectories(fs::path fpath);
 	bool addChild(const string& name, const std::string& fpath, const Method& type, const string& content = "") {
-		ftype t = type==kCreateFile ? kFile : kDirectory;
-		INode *rawchild = new INode(name, fpath, t);
+		ftype t = type == kCreateFile ? kFile : kDirectory;
+		INode* rawchild = new INode(name, fpath, t);
 		std::shared_ptr<INode> child(rawchild);
 		_children.push_back(child);
 		//build file in disk
@@ -22,7 +22,7 @@ public:
 	}
 	bool eraseChild(const string& name) {
 		for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++) {
-			if ((*_itr_node)->_name == name) 
+			if ((*_itr_node)->_name == name)
 				_children.erase(_itr_node);
 		}
 		return true;
@@ -36,10 +36,16 @@ public:
 	std::list<shared_ptr<INode>> getChildren() {
 		return _children;
 	}
+	std::vector<std::string> getChildrenname() {
+		std::vector<std::string> namelist;
+		for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++)
+			namelist.push_back((*_itr_node)->getName());
+		return namelist;
+	}
 	std::string getName() {
 		return _name;
 	}
-	void setName(const std::string & name) {
+	void setName(const std::string& name) {
 		_name = name;
 	}
 
@@ -82,19 +88,19 @@ void FileSystem::INode::buildDirectories(fs::path fpath)
 		创建的direcories的name不可以包含'.'和'/'
 		使用是否包含'.'来判断文件类型
 	*/
-	for (auto &itr : fs::directory_iterator(fpath)) {
+	for (auto& itr : fs::directory_iterator(fpath)) {
 		auto title = itr.path();
 		std::string str_title = title.generic_string();
 		int pos = str_title.find_first_of('/') + 1;
 		std::string fname = str_title.substr(pos);
 		if (fname.find('.') == string::npos) {
-			INode *tempchild = new INode(fname, fpath.generic_string(), kDirectory);
+			INode* tempchild = new INode(fname, fpath.generic_string(), kDirectory);
 			std::shared_ptr<INode> child(tempchild);
 			child->buildDirectories(fpath / fname);
 			_children.push_back(child);
 		}
 		else {
-			INode *tempchild = new INode(fname, fpath.generic_string(), kFile);
+			INode* tempchild = new INode(fname, fpath.generic_string(), kFile);
 			std::shared_ptr<INode> child(tempchild);
 			_children.push_back(child);
 		}
@@ -120,7 +126,7 @@ FileSystem::FileSystem()
 		_workingDirectory = _root;
 		_root->buildDirectories(_absoluteRootPath);
 	}
-	
+
 }
 
 
@@ -131,7 +137,7 @@ void FileSystem::start()
 {
 	assert(!_thread);
 	_quit = false;
-	
+
 	_thread.reset(new thread(
 		bind(&FileSystem::threadFunc, this)
 	));
@@ -147,18 +153,23 @@ void FileSystem::lockPath()
 
 }
 
-std::future<bool> FileSystem::createFile(const std::string & name, const std::string & content)
+std::vector<std::string> FileSystem::list()
+{
+	return _workingDirectory->getChildrenname();
+}
+
+std::future<bool> FileSystem::createFile(const std::string& name, const std::string& content)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	_condition.wait(lck);
 	if (name.find('/') != string::npos) {
 		std::future<bool> result = std::async(std::launch::async, []() {
 			return false;
-		});
+			});
 		_condition.notify_all();
 		return result;
 	}
-	
+
 	CreateFileParams param = { name, _workingDirectory->getPath() + "/" + name, content };
 	IORequestPacket packet = { kCreateFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
@@ -169,14 +180,14 @@ std::future<bool> FileSystem::createFile(const std::string & name, const std::st
 	return proObj.get_future();
 }
 
-std::future<bool> FileSystem::createDirectory(const std::string & name)
+std::future<bool> FileSystem::createDirectory(const std::string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	_condition.wait(lck);
 	if (name.find('/') == string::npos && name.find('.') == string::npos) {
 		std::future<bool> result = std::async(std::launch::async, []() {
 			return false;
-		});
+			});
 		_condition.notify_all();
 		return result;
 	}
@@ -191,7 +202,7 @@ std::future<bool> FileSystem::createDirectory(const std::string & name)
 	return proObj.get_future();
 }
 
-std::future<bool> FileSystem::removeFile(const std::string & name)
+std::future<bool> FileSystem::removeFile(const std::string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	_condition.wait(lck);
@@ -207,7 +218,7 @@ std::future<bool> FileSystem::removeFile(const std::string & name)
 	if (tempptr->getLockCount() > 0 && !ifexist) {
 		std::future<bool> result = std::async(std::launch::async, []() {
 			return false;
-		});
+			});
 		_condition.notify_all();
 		return result;
 	}
@@ -222,7 +233,7 @@ std::future<bool> FileSystem::removeFile(const std::string & name)
 	return proObj.get_future();
 }
 
-std::future<bool> FileSystem::rename(const std::string & oldname, const std::string & newname)
+std::future<bool> FileSystem::rename(const std::string& oldname, const std::string& newname)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	_condition.wait(lck);
@@ -238,7 +249,7 @@ std::future<bool> FileSystem::rename(const std::string & oldname, const std::str
 	if (tempptr->getLockCount() > 0 && !ifexist) {
 		std::future<bool> result = std::async(std::launch::async, []() {
 			return false;
-		});
+			});
 		_condition.notify_all();
 		return result;
 	}
@@ -266,12 +277,12 @@ std::future<bool> FileSystem::back()
 		ifback = false;
 	std::future<bool> result = std::async(std::launch::async, [ifback]() {
 		return ifback;
-	});
+		});
 	_condition.notify_all();
 	return result;
 }
 
-std::future<bool> FileSystem::load(const string &name)
+std::future<bool> FileSystem::load(const string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	_condition.wait(lck);
@@ -285,7 +296,7 @@ std::future<bool> FileSystem::load(const string &name)
 	}
 	std::future<bool> result = std::async(std::launch::async, [ifexist]() {
 		return ifexist;
-	});
+		});
 	_condition.notify_all();
 	return result;
 }
@@ -333,7 +344,7 @@ void FileSystem::threadFunc()
 						break;
 					}
 				}
-				if (ifdel) 
+				if (ifdel)
 					request.second.set_value(false);
 			}
 			else if (op.method == kMakeDirectory) {
@@ -353,13 +364,13 @@ void FileSystem::threadFunc()
 					fs::create_directories(param.fpath);
 				}
 			}
-			else if (op.method == kRename){
+			else if (op.method == kRename) {
 				RenameParams param = std::get<RenameParams>(op.params);
 				std::list<shared_ptr<INode>> dict = op.workingDirectory->getChildren();
 				bool ifexist = false;
 				bool ifrepeat = false;
 				for (_itr_node = dict.begin(); _itr_node != dict.end(); _itr_node++) {
-					if ((*_itr_node)->getName() == param.oldname) 
+					if ((*_itr_node)->getName() == param.oldname)
 						ifexist = true;
 					if ((*_itr_node)->getName() == param.newname)
 						ifrepeat = true;

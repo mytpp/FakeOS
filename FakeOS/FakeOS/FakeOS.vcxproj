@@ -85,6 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,6 +124,7 @@
     <ClCompile Include="PagedMemoryManager.cpp" />
     <ClCompile Include="ProcessScheduler.cpp" />
     <ClCompile Include="ScheduleQueue.cpp" />
+    <ClCompile Include="SegmentedMemoryManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -133,6 +135,7 @@
     <ClInclude Include="PagedMemoryManager.h" />
     <ClInclude Include="ProcessScheduler.h" />
     <ClInclude Include="ScheduleQueue.h" />
+    <ClInclude Include="SegmentedMemoryManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" />

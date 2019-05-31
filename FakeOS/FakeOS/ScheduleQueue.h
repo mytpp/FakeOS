@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Kernel.h"
 #include <cstdint>
@@ -42,20 +42,13 @@ namespace ScheduleQueue
 		bool isBegin;  //is beginning of a block of virtual memory
 		bool isEnd;    //is end of a block of virtual memory, used by MemoryManager::virtualFree
 	};
-    struct SegmentTableEntry
-    {
-        size_t base;//段基址
-        size_t segmentSize;//段大小
-	};
-    struct MemoryStateEntry
-    {
-        bool free;//available?
-        bool isBegin;
-        bool isEnd;
+	struct SegmentTableEntry
+	{
+		size_t base;//¶Î»ùÖ·
+		size_t segmentSize;//¶Î´óÐ¡
 	};
 	using PageTable = std::array<PageTableEntry, kernel::kMaxPagesPerProcess>;
-    using SegmentTable = std::array<SegmentTableEntry, kernel::kMaxSegmentNum>;
-    using MemoryState = std::array<MemoryStateEntry, kernel::kMemoryBlocks>;
+	using SegmentTable = std::array<SegmentTableEntry, kernel::kMaxSegmentNum>;
 	//the address space that a process sees is flat memory model
 
 	//--------------------------------------------------------------------------
@@ -82,12 +75,12 @@ namespace ScheduleQueue
 		Statistics statistics; //16
 		std::map<std::string, size_t> allocatedMemory; //12
 		std::unique_ptr<PageTable> pageTable; //4
-        //ptr to segment table
 		std::unique_ptr<SegmentTable> segmentTable;
+		//ptr to segment table
 		//open-file table
 	};
 	//int a = sizeof(PCB); //DEBUG
-	extern std::unique_ptr<MemoryState> memoryState;// find out available memory
+	
 	
 	//load process into newlyCreatedQueue
 	void LoadProcess(const std::string& path);
@@ -97,7 +90,6 @@ namespace ScheduleQueue
 	//what operation will be used, given that we have different scheduling 
 	//algorithm.
 	//Store (smart) pointer of PCB in those queues to avoid unnecessary copies
-
 	
 	extern std::mutex newlyCreatedQueueMutex;
 	//data structure for newlyCreatedQueue...
@@ -108,5 +100,10 @@ namespace ScheduleQueue
 
 	extern std::mutex waitingQueueMutex;
 	//data structure for waitingQueue...
+	struct PCBNode
+	{
+		std::shared_ptr<PCB> _value;
+		struct PCBNode* followPointer;
+	};
 }
 

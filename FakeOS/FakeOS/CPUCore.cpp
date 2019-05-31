@@ -10,6 +10,8 @@ using namespace std;
 using namespace kernel;
 
 
+ProcessScheduler ScheduleSystem;
+
 CPUCore::CPUCore()
 	:_quit(false)
 	,_thread(nullptr, kernel::ThreadDeleter)
@@ -45,15 +47,27 @@ void CPUCore::threadFunc()
 		
 		{//critical section
 			scoped_lock lock(ScheduleQueue::readyQueueMutex);
-
+			if (ScheduleSystem.getRunningProcess() == NULL) {
+				return;
+			}
+			else {
+				ScheduleSystem.getRunningProcess()->programCounter--;
+				if (ScheduleSystem.getRunningProcess()->programCounter == 0) {
+					ParseAndDoDirective(ScheduleSystem.getRunningProcess()->path);
+				}
+			}
 			//peek the top element of kernel::readyQueue
 			//if programCounter reach 0, call ParseAndDoDirective()
-
 		}
 
 		{//critical section
 			scoped_lock lock(ScheduleQueue::waitingQueueMutex);
-
+			for (int ioCounter = 0; ioCounter < _ioChannel.size(); ioCounter++)
+			{
+				if (_ioChannel[ioCounter].event.wait_for(std::chrono::milliseconds(5)) == std::future_status::ready) {
+					_ioChannel[ioCounter].pcb->state = ScheduleQueue::kReady;
+				}
+			}
 			//poll _ioChannel to see if there is IO event ready,
 			//and change the corresponding PCB's state to ready
 

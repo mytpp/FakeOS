@@ -3,7 +3,7 @@
 using namespace std;
 namespace ScheduleQueue
 {
-	
+	/*
 
 	template<typename rtnTtpe, typename ArgType>
 	class object {
@@ -612,14 +612,14 @@ namespace ScheduleQueue
 			//
 			//¿ÕÏÐPCBÁ´±íµÄ²Ù×÷
 			//
-	};
+	};*/
 		
 		
 	mutex newlyCreatedQueueMutex;
 	mutex readyQueueMutex;
 	mutex waitingQueueMutex;
 
-	void LoadProcess(const string& path, Priority priority)
+	void LoadProcess(const std::string& path)
 	{
 		//create PCB
 		//put PCB in newlyCreatedQueueMutex

@@ -9,7 +9,6 @@
 
 using namespace std;
 using namespace kernel;
-
 inline void removePrefixedSpace(string_view& sv)
 {
 	sv.remove_prefix(min(sv.find_first_not_of(' '), sv.size()));
