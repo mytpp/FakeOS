@@ -314,10 +314,10 @@ void FileSystem::threadFunc()
 	while (!_quit)
 	{
 		std::pair<IORequestPacket, std::promise<bool>> request;
-		while (!_messageQueue.empty()) {
+		/*while (!_messageQueue.empty()) {
 			request = _messageQueue.front();
 			break;
-		}
+		}*/
 
 		//retrive a new IO request, sleep if there is no IO request
 		{ //critical section, better make it smaller
