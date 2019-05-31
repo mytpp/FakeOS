@@ -2,6 +2,9 @@
 #include <cassert>
 #include <list>
 #include <fstream>
+#include <iostream>
+
+
 
 using namespace std;
 enum ftype :uint8_t { kFile, kDirectory };
@@ -116,12 +119,13 @@ FileSystem::FileSystem()
 	, _thread(nullptr, kernel::ThreadDeleter)
 {
 	if (!fs::exists("root")) {
+		fs::create_directory("root");
 		_absoluteRootPath = fs::path("root");
 		_root = std::shared_ptr<INode>(new INode("root", _absoluteRootPath.generic_string(), kDirectory));
 		_workingDirectory = _root;
 	}
 	else {
-		_absoluteRootPath = "root";
+		_absoluteRootPath = fs::path("root");
 		_root = std::shared_ptr<INode>(new INode("root", _absoluteRootPath.generic_string(), kDirectory));
 		_workingDirectory = _root;
 		_root->buildDirectories(_absoluteRootPath);
@@ -141,6 +145,7 @@ void FileSystem::start()
 	_thread.reset(new thread(
 		bind(&FileSystem::threadFunc, this)
 	));
+	_condition.notify_all();
 }
 
 void FileSystem::quit()
@@ -152,6 +157,8 @@ void FileSystem::lockPath()
 {
 
 }
+
+
 
 std::vector<std::string> FileSystem::list()
 {
@@ -183,7 +190,9 @@ std::future<bool> FileSystem::createFile(const std::string& name, const std::str
 std::future<bool> FileSystem::createDirectory(const std::string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
-	_condition.wait(lck);
+	cout << "new directoy:" << name << endl;
+	//_condition.wait(lck);
+	cout << "new directoy:" << name << endl;
 	if (name.find('/') == string::npos && name.find('.') == string::npos) {
 		std::future<bool> result = std::async(std::launch::async, []() {
 			return false;
@@ -191,14 +200,13 @@ std::future<bool> FileSystem::createDirectory(const std::string& name)
 		_condition.notify_all();
 		return result;
 	}
-
 	CreateDirectoryParams param = { name, _workingDirectory->getPath() + "/" + name };
 	IORequestPacket packet = { kMakeDirectory, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
 	_messageQueue.emplace(packet, std::move(proObj));
 
-	_condition.notify_all();
+	//_condition.notify_all();
 	return proObj.get_future();
 }
 
@@ -306,10 +314,15 @@ void FileSystem::threadFunc()
 	while (!_quit)
 	{
 		std::pair<IORequestPacket, std::promise<bool>> request;
+		while (!_messageQueue.empty()) {
+			request = _messageQueue.front();
+			break;
+		}
 
 		//retrive a new IO request, sleep if there is no IO request
 		{ //critical section, better make it smaller
 			unique_lock<std::mutex> lock(_mutex);
+			cout << "process" << endl;
 			_condition.wait(lock, [this] { return !_messageQueue.empty(); });
 			request = std::move(_messageQueue.front());
 			IORequestPacket op = request.first;
