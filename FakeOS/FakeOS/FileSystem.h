@@ -53,6 +53,7 @@ public:
 	//create a directory at current directory
 	[[nodiscard]]
 	std::future<bool> createDirectory(const std::string& name);
+	//void createDirectory(const std::string& name);
 
 	//delete a file at current directory
 	[[nodiscard]]
@@ -66,6 +67,8 @@ public:
 	std::future<bool> back();
 	//cd
 	std::future<bool> load(const std::string &name);
+	//
+	std::string nowpath();
 
 private:
 	void threadFunc();
