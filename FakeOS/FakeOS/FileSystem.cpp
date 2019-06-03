@@ -16,17 +16,16 @@ enum ftype :uint8_t { kFile, kDirectory };
 class FileSystem::INode
 {
 public:
-	INode(string name, std::string fpath, ftype type);
+	INode(string name, std::string fpath, ftype type, std::string content);
 	
 	~INode();
 	void buildDirectories(fs::path fpath, std::shared_ptr<INode> pa);
 	bool addChild(const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content = "") {
 		ftype t = type == kCreateFile ? kFile : kDirectory;
-		INode* rawchild = new INode(name, fpath, t);
+		INode* rawchild = new INode(name, fpath, t, content);
 		std::shared_ptr<INode> child(rawchild);
 		rawchild->_parent = pa;
 		_children.push_back(child);
-		
 		//build file in disk
 		return true;
 	}
@@ -42,6 +41,9 @@ public:
 	}
 	std::string getPath() {
 		return _path;
+	}
+	std::string getContent() {
+		return _content;
 	}
 	bool ifChildreneExist() {
 		bool tmp = !_children.empty();
@@ -84,14 +86,16 @@ private:
 	std::atomic<uint8_t> _lockCount;
 	std::string _name;
 	ftype _type;
+
+	std::string _content;
 	std::string _path;
 	weak_ptr<INode> _parent;
 	std::list<shared_ptr<INode>> _children;
 	std::list<shared_ptr<INode>>::iterator _itr_node;
 };
 
-FileSystem::INode::INode(string name, std::string fpath, ftype type)
-	:_name(std::move(name)), _path(std::move(fpath)), _type(std::move(type))
+FileSystem::INode::INode(string name, std::string fpath, ftype type, std::string content)
+	:_name(std::move(name)), _path(std::move(fpath)), _type(std::move(type)), _content(std::move(content))
 {
 }
 
@@ -106,6 +110,8 @@ void FileSystem::INode::buildDirectories(fs::path fpath, std::shared_ptr<INode> 
 		创建的direcories的name不可以包含'.'和'/'
 		使用是否包含'.'来判断文件类型
 	*/
+	int count = 0;
+
 	for (auto& itr : fs::directory_iterator(fpath)) {
 		auto title = itr.path();
 		std::string str_title = title.generic_string();
@@ -119,9 +125,20 @@ void FileSystem::INode::buildDirectories(fs::path fpath, std::shared_ptr<INode> 
 			_children.push_back(child);
 		}
 		else {
-			INode* tempchild = new INode(fname, fpath.generic_string(), kFile);
-			std::shared_ptr<INode> child(tempchild);
-			_children.push_back(child);
+			std::ifstream infile;
+			infile.open(fpath / fname);
+			std::string content_line;
+			std::string content = "";
+
+			cout << fname << " " << count << endl;
+			if (infile.is_open()) {
+				while (getline(infile, content_line))
+					content += content_line + "\n";		
+			}
+			else
+				cout << "not open" << endl;
+			//const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content = ""
+			pa->addChild(fname, fpath.generic_string(), kCreateFile, pa, content);
 		}
 
 	}
@@ -204,6 +221,17 @@ std::future<bool> FileSystem::createFile(const std::string& name, const std::str
 	lck.unlock();
 	_condition.notify_all();
 	return fuObj;
+}
+
+std::string FileSystem::loadFile(std::string name)
+{
+	_itr_node = _workingDirectory->getChildren();
+	bool ifexist = false;
+	for (; _itr_node != _workingDirectory->getChildren_end(); _itr_node++) {
+		if ((*_itr_node)->getName() == name) 
+			return (*_itr_node)->getContent();
+	}
+	return "no file named" + name;
 }
 
 std::future<bool> FileSystem::createDirectory(const std::string& name)
