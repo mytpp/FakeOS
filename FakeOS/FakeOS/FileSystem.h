@@ -49,7 +49,9 @@ public:
 	std::future<bool> appendFile(
 		const std::string& name,
 		const std::string& content);
-	
+
+	//open a .txt file in command line
+	std::string loadFile(std::string name);
 	//create a directory at current directory
 	[[nodiscard]]
 	std::future<bool> createDirectory(const std::string& name);
@@ -132,5 +134,4 @@ private:
 	kernel::ThreadPtr _thread;
 	std::list<std::shared_ptr<INode>>::iterator _itr_node;
 };
-
 
