@@ -20,22 +20,9 @@ public:
 	
 	~INode();
 	void buildDirectories(fs::path fpath, std::shared_ptr<INode> pa);
-	bool addChild(const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content = "") {
-		ftype t = type == kCreateFile ? kFile : kDirectory;
-		INode* rawchild = new INode(name, fpath, t, content);
-		std::shared_ptr<INode> child(rawchild);
-		rawchild->_parent = pa;
-		_children.push_back(child);
-		//build file in disk
-		return true;
-	}
-	bool eraseChild(const string& name) {
-		for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++) {
-			if ((*_itr_node)->_name == name)
-				_children.erase(_itr_node);
-		}
-		return true;
-	}
+	bool addChild(const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content = "");
+	bool eraseChild(const string& name);
+
 	shared_ptr<INode> getParent() {
 		return _parent.lock();
 	}
@@ -68,6 +55,12 @@ public:
 	void setName(const std::string& name) {
 		_name = name;
 	}
+	bool iftxt() {
+		return _type == kFile;
+	}
+	void append(std::string apc) {
+		_content += "\n" + apc;
+	}
 
 	//add its and all its forefathers' _lockCount
 	void lockNodePath() {
@@ -94,7 +87,7 @@ private:
 	std::list<shared_ptr<INode>>::iterator _itr_node;
 };
 
-FileSystem::INode::INode(string name, std::string fpath, ftype type, std::string content)
+FileSystem::INode::INode(string name, std::string fpath, ftype type, std::string content="")
 	:_name(std::move(name)), _path(std::move(fpath)), _type(std::move(type)), _content(std::move(content))
 {
 }
@@ -142,6 +135,24 @@ void FileSystem::INode::buildDirectories(fs::path fpath, std::shared_ptr<INode> 
 		}
 
 	}
+}
+
+bool FileSystem::INode::addChild(const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content) {
+	ftype t = type == kCreateFile ? kFile : kDirectory;
+	INode* rawchild = new INode(name, fpath, t, content);
+	std::shared_ptr<INode> child(rawchild);
+	rawchild->_parent = pa;
+	_children.push_back(child);
+	//build file in disk
+	return true;
+}
+
+bool FileSystem::INode::eraseChild(const string& name) {
+	for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++) {
+		if ((*_itr_node)->_name == name)
+			_children.erase(_itr_node);
+	}
+	return true;
 }
 
 
@@ -202,17 +213,25 @@ std::vector<std::string> FileSystem::list()
 std::future<bool> FileSystem::createFile(const std::string& name, const std::string& content)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
-	if (name.find('/') != string::npos) {
-		std::future<bool> result = std::async(std::launch::async, []() {
-			return false;
-			});
-		lck.unlock();
-		_condition.notify_all();
-		return result;
-	}
 
 	CreateFileParams param = { name, _workingDirectory->getPath() + "/" + name, content };
 	IORequestPacket packet = { kCreateFile, param };
+	packet.workingDirectory = std::shared_ptr(_workingDirectory);
+	std::promise<bool> proObj;
+	std::future<bool> fuObj = proObj.get_future();
+	_messageQueue.emplace(packet, std::move(proObj));
+
+	lck.unlock();
+	_condition.notify_all();
+	return fuObj;
+}
+
+std::future<bool> FileSystem::appendFile(const std::string& name, const std::string& content)
+{
+	std::unique_lock<std::mutex> lck(_mutex);
+	
+	AppendFileParams param = { name, content, _workingDirectory->getPath() + "/" + name };
+	IORequestPacket packet = { kAppendFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
 	std::future<bool> fuObj = proObj.get_future();
@@ -449,10 +468,24 @@ void FileSystem::threadFunc()
 				if (ifexist && !ifrepeat) {
 					(*_itr_node)->setName(param.newname);
 					fs::rename(fs::path(param.fpath) / param.oldname, fs::path(param.fpath) / param.newname);
+					request.second.set_value(true);
 				}
 				else
 					request.second.set_value(false);
 			}
+			else if (request.first.method == kAppendFile) {
+				AppendFileParams param = std::get<AppendFileParams>(request.first.params);
+				_itr_node = request.first.workingDirectory->getChildren();
+				bool ifexist = false;
+				for (; _itr_node != request.first.workingDirectory->getChildren_end(); _itr_node++) {
+					if ((*_itr_node)->getName() == param.name && (*_itr_node)->iftxt()) {
+						(*_itr_node)->append(param.content);
+						ifexist = true;
+						break;
+					}
+				}
+				request.second.set_value(ifexist);
+;			}
 			_messageQueue.pop();
 			lock.unlock();
 			_condition.notify_all();
