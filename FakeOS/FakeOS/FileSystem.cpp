@@ -19,12 +19,12 @@ public:
 	INode(string name, std::string fpath, ftype type);
 	
 	~INode();
-	void buildDirectories(fs::path fpath);
+	void buildDirectories(fs::path fpath, std::shared_ptr<INode> pa);
 	bool addChild(const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content = "") {
 		ftype t = type == kCreateFile ? kFile : kDirectory;
 		INode* rawchild = new INode(name, fpath, t);
 		std::shared_ptr<INode> child(rawchild);
-		rawchild->_parent = std::shared_ptr(pa);
+		rawchild->_parent = pa;
 		_children.push_back(child);
 		
 		//build file in disk
@@ -45,10 +45,6 @@ public:
 	}
 	bool ifChildreneExist() {
 		bool tmp = !_children.empty();
-		if (tmp)
-			cout << 1 << endl;
-		else
-			cout << 0 << endl;
 		return tmp;
 	}
 	std::list<shared_ptr<INode>>::iterator getChildren() {
@@ -60,8 +56,6 @@ public:
 	std::vector<std::string> getChildrenname() {
 		std::vector<std::string> namelist;
 		for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++) {
-			cout << "childname:" << (*_itr_node)->getName() << endl;
-			
 			namelist.push_back((*_itr_node)->getName());
 		}
 		return namelist;
@@ -105,7 +99,7 @@ FileSystem::INode::~INode()
 {
 }
 
-void FileSystem::INode::buildDirectories(fs::path fpath)
+void FileSystem::INode::buildDirectories(fs::path fpath, std::shared_ptr<INode> pa)
 {
 	/*
 		创建的file的name不可以包含'/'
@@ -115,12 +109,13 @@ void FileSystem::INode::buildDirectories(fs::path fpath)
 	for (auto& itr : fs::directory_iterator(fpath)) {
 		auto title = itr.path();
 		std::string str_title = title.generic_string();
-		int pos = str_title.find_first_of('/') + 1;
+		int pos = str_title.find_last_of('/') + 1;
 		std::string fname = str_title.substr(pos);
 		if (fname.find('.') == string::npos) {
 			INode* tempchild = new INode(fname, fpath.generic_string(), kDirectory);
 			std::shared_ptr<INode> child(tempchild);
-			child->buildDirectories(fpath / fname);
+			child->_parent = pa;
+			child->buildDirectories(fpath / fname, child);
 			_children.push_back(child);
 		}
 		else {
@@ -128,8 +123,7 @@ void FileSystem::INode::buildDirectories(fs::path fpath)
 			std::shared_ptr<INode> child(tempchild);
 			_children.push_back(child);
 		}
-		//std::cout << pos << std::endl;
-		//std::cout << str_title.substr(pos) << std::endl;
+
 	}
 }
 
@@ -149,7 +143,7 @@ FileSystem::FileSystem()
 		_absoluteRootPath = fs::path("root");
 		_root = std::shared_ptr<INode>(new INode("root", _absoluteRootPath.generic_string(), kDirectory));
 		_workingDirectory = _root;
-		_root->buildDirectories(_absoluteRootPath);
+		_root->buildDirectories(_absoluteRootPath, _workingDirectory);
 	}
 
 }
@@ -215,7 +209,6 @@ std::future<bool> FileSystem::createFile(const std::string& name, const std::str
 std::future<bool> FileSystem::createDirectory(const std::string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
-	cout << "new directoy:" << name << endl;
 
 	CreateDirectoryParams param = { name, _workingDirectory->getPath() + "/" + name };
 	IORequestPacket packet = { kMakeDirectory, param };
@@ -224,33 +217,11 @@ std::future<bool> FileSystem::createDirectory(const std::string& name)
 	std::future<bool> fuObj = proObj.get_future();
 	_messageQueue.emplace(packet, std::move(proObj));
 
-	if (!_messageQueue.empty())
-		cout << "not empty" << endl;
 	lck.unlock();
 	_condition.notify_all();
 	
 	return fuObj;
 }
-
-/*void FileSystem::createDirectory(const std::string& name)
-{
-	std::unique_lock<std::mutex> lck(_mutex);
-	//_condition.wait(lck);
-	cout << "new directoy:" << name << endl;
-	if (name.find('/') != string::npos && name.find('.') != string::npos) {
-		
-		return;
-	}
-	CreateDirectoryParams param = { name, _workingDirectory->getPath() + "/" + name };
-	IORequestPacket packet = { kMakeDirectory, param };
-	packet.workingDirectory = std::shared_ptr(_workingDirectory);
-	std::promise<bool> proObj;
-	_messageQueue.emplace(packet, std::move(proObj));
-	if (!_messageQueue.empty())
-		cout << "not empty" << endl;
-	lck.unlock();
-	_condition.notify_all();
-}*/
 
 
 std::future<bool> FileSystem::removeFile(const std::string& name)
@@ -321,7 +292,6 @@ std::future<bool> FileSystem::rename(const std::string& oldname, const std::stri
 std::future<bool> FileSystem::back()
 {
 	std::unique_lock<std::mutex> lck(_mutex);
-
 	bool ifback;
 	if (_workingDirectory != _root) {
 		_workingDirectory = _workingDirectory->getParent();
@@ -330,9 +300,6 @@ std::future<bool> FileSystem::back()
 	else
 		ifback = false;
 
-	cout << "working name" << endl;
-	cout << _workingDirectory->getName() << endl;
-	cout << "working name end" << endl;
 	_workingDirectory->getChildrenname();
 	cout << "working name end end" << endl;
 
@@ -350,15 +317,11 @@ std::future<bool> FileSystem::load(const string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 
-	cout << "loading2" << endl;
 	bool ifexist = false;
 	for (_itr_node = _workingDirectory->getChildren(); _itr_node != _workingDirectory->getChildren_end(); _itr_node++) {
 		if ((*_itr_node)->getName() == name) {
 			ifexist = true;
-			cout << "find child" << endl;
 			_workingDirectory = std::shared_ptr(*_itr_node);
-			cout << _workingDirectory->getName() << endl;
-			cout << "change working" << endl;
 			break;
 		}
 	}
@@ -438,13 +401,11 @@ void FileSystem::threadFunc()
 					}
 				}
 				if (!ifexist) {
-					cout << "add:" << param.name << endl;
 					request.first.workingDirectory->addChild(param.name, param.fpath, request.first.method, request.first.workingDirectory);
 					request.second.set_value(true);
 					fs::create_directories(param.fpath);
 				}
-				cout << _workingDirectory->ifChildreneExist() << endl;
-				cout << "here2" << endl;
+				
 			}
 			else if (request.first.method == kRename) {
 				RenameParams param = std::get<RenameParams>(request.first.params);
