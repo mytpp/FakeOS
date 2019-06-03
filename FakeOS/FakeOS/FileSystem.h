@@ -82,7 +82,8 @@ private:
 		kCreateFile	,
 		kDeleteFile,
 		kMakeDirectory,
-		kRename
+		kRename,
+		kAppendFile
 	};
 
 	struct CreateFileParams
@@ -107,6 +108,12 @@ private:
 		std::string newname;
 		std::string fpath;
 	};
+	struct AppendFileParams
+	{
+		std::string name;
+		std::string content;
+		std::string fpath;
+	};
 
 	struct IORequestPacket	
 	{
@@ -115,7 +122,8 @@ private:
 			CreateFileParams,
 			CreateDirectoryParams,
 			RemoveFileParams,
-			RenameParams
+			RenameParams,
+			AppendFileParams
 		> params;
 		std::shared_ptr<INode> workingDirectory;	//	parent path
 	};
