@@ -49,10 +49,13 @@ public:
 	std::future<bool> appendFile(
 		const std::string& name,
 		const std::string& content);
-	
+
+	//open a .txt file in command line
+	std::string loadFile(std::string name);
 	//create a directory at current directory
 	[[nodiscard]]
 	std::future<bool> createDirectory(const std::string& name);
+	//void createDirectory(const std::string& name);
 
 	//delete a file at current directory
 	[[nodiscard]]
@@ -66,6 +69,8 @@ public:
 	std::future<bool> back();
 	//cd
 	std::future<bool> load(const std::string &name);
+	//
+	std::string nowpath();
 
 private:
 	void threadFunc();
@@ -77,7 +82,8 @@ private:
 		kCreateFile	,
 		kDeleteFile,
 		kMakeDirectory,
-		kRename
+		kRename,
+		kAppendFile
 	};
 
 	struct CreateFileParams
@@ -102,6 +108,12 @@ private:
 		std::string newname;
 		std::string fpath;
 	};
+	struct AppendFileParams
+	{
+		std::string name;
+		std::string content;
+		std::string fpath;
+	};
 
 	struct IORequestPacket	
 	{
@@ -110,7 +122,8 @@ private:
 			CreateFileParams,
 			CreateDirectoryParams,
 			RemoveFileParams,
-			RenameParams
+			RenameParams,
+			AppendFileParams
 		> params;
 		std::shared_ptr<INode> workingDirectory;	//	parent path
 	};
