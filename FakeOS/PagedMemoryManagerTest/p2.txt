@@ -1,0 +1,4 @@
+0 dm 102400 as p1  #7pages
+0 am p1 4
+0 am p1 1
+0 fm p1

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <numeric> 
 #include <iterator>
+#include <iostream>
 
 using namespace std;
 using namespace kernel;
@@ -19,8 +20,9 @@ PagedMemoryManager::PagedMemoryManager()
 {
 	for (size_t i = 0; i < kMemoryPages; i++)
 		_frames.emplace_back(i, 0, nullptr);
-	for (auto frameIt=_frames.begin(); frameIt!=_frames.end(); frameIt++)
-		_frameLocator[(*frameIt).frameNumber] = frameIt;
+	_nextToAllocate = _frames.begin();
+	//for (auto frameIt=_frames.begin(); frameIt!=_frames.end(); frameIt++)
+	//	_frameLocator[(*frameIt).frameNumber] = frameIt;
 	for (size_t i = 0; i < kSwapAreaPages; i++)
 		_freeSwapAreaPages.insert(i + kMemoryPages);
 }
@@ -34,9 +36,12 @@ bool PagedMemoryManager::virtualAllocate(
 	const size_t size,
 	size_t& startPage)
 {
-	//assert(0 < size); // refuse to allocate if size<=0
-	if (size <= 0 || kMaxPagesPerProcess < size)
+	// refuse to allocate if size<=0
+	if (size <= 0 || kMaxPagesPerProcess * kPageSize < size)
+	{
+		cout << "Allocate failed: illegal size." << endl;
 		return false;
+	}
 
 	int toAllocate = 0;
 	auto& pageTable = *(pcb->pageTable);
@@ -46,7 +51,10 @@ bool PagedMemoryManager::virtualAllocate(
 	//critical section starts
 	scoped_lock lock(_mutex);
 	if (pagesNeeded > _freeMemoryPagesNum + _freeSwapAreaPages.size())
+	{
+		cout << "Allocate failed: no enough memory." << endl;
 		return false;
+	}
 
 	//try to reserve address space
 	//use first fit
@@ -67,7 +75,10 @@ bool PagedMemoryManager::virtualAllocate(
 		}
 	}
 	if (i == kMaxPagesPerProcess) //address space unavailable!
+	{
+		cout << "Allocate failed: no enough address space." << endl;
 		return false;
+	}
 
 	startPage = toAllocate;
 
@@ -76,12 +87,12 @@ bool PagedMemoryManager::virtualAllocate(
 		_freeMemoryPagesNum -= pagesNeeded;
 	else
 		_freeMemoryPagesNum = 0;
-
+	
 	//try to commit physical memory
 	while (0 < pagesNeeded && _nextToAllocate != _frames.end())
 	{
 		size_t frameNumber = _nextToAllocate->frameNumber;
-		auto pageTableEntry = pageTable[toAllocate];
+		auto& pageTableEntry = pageTable[toAllocate];
 
 		//update pcb's page table
 		pageTableEntry.pageNumber = frameNumber;
@@ -103,7 +114,7 @@ bool PagedMemoryManager::virtualAllocate(
 	assert(pagesNeeded <= _freeSwapAreaPages.size());
 	while (0 < pagesNeeded)
 	{
-		auto pageTableEntry = pageTable[toAllocate];
+		auto& pageTableEntry = pageTable[toAllocate];
 
 		//update pcb's page table
 		pageTableEntry.pageNumber = *(_freeSwapAreaPages.begin());
@@ -117,7 +128,8 @@ bool PagedMemoryManager::virtualAllocate(
 		pagesNeeded--;
 	}
 	pageTable[startPage].isBegin = true;
-	pageTable[startPage + pagesNeeded - 1].isEnd = true;
+	//value of maxAvailableSpace == initial value of pagesNeeded
+	pageTable[startPage + maxAvailableSpace - 1].isEnd = true;
 
 	return true;
 }
@@ -142,16 +154,9 @@ bool PagedMemoryManager::virtualFree(
 		if (pageTable[i].inMemory)
 		{
 			auto frame = _frameLocator[pageTable[i].pageNumber];
-			bool adjust = false;
-			//execution order is important
-			if (_nextToAllocate == _frames.end())
-				adjust = true;
-			_frames.emplace_back(frame->frameNumber, 0, nullptr);
-			if (adjust)
-				_nextToAllocate = --_frames.end();
-
+			_frames.splice(_nextToAllocate, _frames, frame);
+			_nextToAllocate = frame;
 			_frameLocator.erase(frame->frameNumber);
-			_frames.erase(frame);
 			_freeMemoryPagesNum++;
 		}
 		else //pageTable[i] in swap area
@@ -170,7 +175,10 @@ bool PagedMemoryManager::accessMemory(
 {
 	auto& pageTableEntry = (*(pcb->pageTable))[pageNumber];
 	if (pageTableEntry.free)
+	{
+		cout << "Accessing freed memory." << endl;
 		return false;
+	}
 
 	scoped_lock lock(_mutex);
 	if (!pageTableEntry.inMemory)
@@ -203,8 +211,33 @@ bool PagedMemoryManager::accessMemory(
 	{
 		//move the accessed frame to the end of _frames.
 		auto frame = _frameLocator[pageTableEntry.pageNumber];
-		_frames.splice(_frames.end(), _frames, frame);
+		_frames.splice(_nextToAllocate, _frames, frame);
+		//reset _frameLocator
+		_frameLocator[pageTableEntry.pageNumber] = --_frames.end();
 	}
 
 	return true;
 }
+
+void PagedMemoryManager::printMemoryStatistics()
+{
+	size_t usedMemoryPagesNum = kMemoryPages - _freeMemoryPagesNum;
+	size_t usedSwapAreaPagesNum = kSwapAreaPages - _freeSwapAreaPages.size();
+	cout << "Free Memory: " << _freeMemoryPagesNum * kPageSize 
+		<<"B (" << _freeMemoryPagesNum<<" pages)  "
+		<< "Used Memory: " << usedMemoryPagesNum * kPageSize
+		<<"B (" << usedMemoryPagesNum << " pages)" << endl;
+	cout << "Free Swap Area Space: " << _freeSwapAreaPages.size() * kPageSize 
+		<< "B (" << _freeSwapAreaPages.size() << " pages)  "
+		<< "Swap Area Used: " << usedSwapAreaPagesNum * kPageSize
+		<< "B (" << usedSwapAreaPagesNum << " pages)  " << endl;
+	cout << "Frames of Physical Memory (Sorted by used time, least -> most recent): " << endl;
+	auto frame = _frames.begin();
+	for (size_t i = 0; i < usedMemoryPagesNum; i++)
+	{
+		cout << frame->frameNumber << "(" << frame->owner->pid << ")" << "->";
+		frame++;
+	}
+	cout << "End" << endl;
+}
+

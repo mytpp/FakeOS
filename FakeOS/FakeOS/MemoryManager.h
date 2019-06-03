@@ -27,5 +27,9 @@ public:
 
 	virtual bool accessMemory(
 		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t location) = 0;
+
+	virtual void printMemoryStatistics() { }
+
+	static void printAllocatedMemoryInProcess(std::shared_ptr<ScheduleQueue::PCB> pcb);
 };
 

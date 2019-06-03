@@ -32,6 +32,7 @@ public:
 	bool accessMemory(
 		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t pageNumber) override;
 
+	void printMemoryStatistics() override;
 
 private:
 	mutable std::mutex _mutex; // protect all data below
@@ -54,6 +55,7 @@ private:
 	std::list<PageInfoEntry>::iterator _nextToAllocate;
 	size_t _freeMemoryPagesNum;
 	//map frame number to its location in _frames;
+	//all mapped frames are allocated, i.e. not free.
 	std::unordered_map<size_t, std::list<PageInfoEntry>::iterator> _frameLocator;
 	
 	//size_t _freeSwapAreaPagesNum; //==_freeSwapAreaPages.size() at most time
