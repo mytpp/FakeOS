@@ -6,8 +6,7 @@
 
 /*待修改：
 将判断io请求是否成功放入请求处理队列中
-对锁定路径进行修改
-文件读取*/
+对锁定路径进行修改*/
 
 using namespace std;
 enum ftype :uint8_t { kFile, kDirectory };
@@ -59,7 +58,7 @@ public:
 		return _type == kFile;
 	}
 	void append(std::string apc) {
-		_content += "\n" + apc;
+		_content += apc;
 	}
 
 	//add its and all its forefathers' _lockCount
@@ -246,7 +245,7 @@ std::string FileSystem::loadFile(std::string name)
 {
 	_itr_node = _workingDirectory->getChildren();
 	bool ifexist = false;
-	for (; _itr_node != _workingDirectory->getChildren_end(); _itr_node++) {
+	for ( ; _itr_node != _workingDirectory->getChildren_end(); _itr_node++) {
 		if ((*_itr_node)->getName() == name) 
 			return (*_itr_node)->getContent();
 	}
@@ -413,7 +412,13 @@ void FileSystem::threadFunc()
 				if (!ifexist) {
 					request.first.workingDirectory->addChild(param.name, param.fpath, request.first.method, request.first.workingDirectory, param.content);
 					request.second.set_value(true);
-					std::ofstream(param.fpath);
+
+					std::ofstream outfile;
+					fs::path filepath = request.first.workingDirectory->getPath() + '/' + request.first.workingDirectory->getName() + '/' + param.name;
+					outfile.open(filepath, ios::out);
+					if (outfile.is_open())
+						outfile << param.content;
+					outfile.close();
 				}
 			}
 			else if (request.first.method == kDeleteFile) {
@@ -480,6 +485,15 @@ void FileSystem::threadFunc()
 				for (; _itr_node != request.first.workingDirectory->getChildren_end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name && (*_itr_node)->iftxt()) {
 						(*_itr_node)->append(param.content);
+
+						// append file local
+						std::fstream outfile;
+						fs::path filepath = (*_itr_node)->getPath() + '/' + (*_itr_node)->getName();
+						outfile.open(filepath, ios::app);
+						if (outfile.is_open())
+							outfile << param.content;
+						outfile.close();
+
 						ifexist = true;
 						break;
 					}
