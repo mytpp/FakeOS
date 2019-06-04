@@ -180,22 +180,28 @@ bool PagedMemoryManager::accessMemory(
 		return false;
 	}
 
+	//The follow commented code lead to an error? WTF?
+	//std::list<PageInfoEntry>::iterator allocatedFrame;
+	//allocatedFrame = _nextToAllocate; //=>error?
 	scoped_lock lock(_mutex);
 	if (!pageTableEntry.inMemory)
-	{//not in memory
+	{   //not in memory
 		_freeSwapAreaPages.insert(pageTableEntry.pageNumber);
 		if (_nextToAllocate != _frames.end())
-		{//memory is not full
-			_nextToAllocate->owner = pcb;
+		{   //memory is not full
+			_frameLocator[_nextToAllocate->frameNumber] = _nextToAllocate;
 			pageTableEntry.pageNumber = _nextToAllocate->frameNumber;
-			pageTableEntry.inMemory = true;
+			_nextToAllocate->pageNumber = pageNumber;
+			_nextToAllocate->owner = pcb;
+			_nextToAllocate++;
+			_freeMemoryPagesNum--;
 		}
 		else // LRU replacement
 		{
 			//swap out the least recently used frame
-			auto& lruPage = _frames.front();
-			auto& anotherPageTable = *(lruPage.owner->pageTable);
-			auto& anotherPageTableEntry = anotherPageTable[lruPage.pageNumber];
+			auto lruPage = _frames.begin();
+			auto& anotherPageTable = *(lruPage->owner->pageTable);
+			auto& anotherPageTableEntry = anotherPageTable[lruPage->pageNumber];
 			assert(anotherPageTableEntry.free == false);
 			anotherPageTableEntry.inMemory = false;
 			assert(!_freeSwapAreaPages.empty());
@@ -203,17 +209,20 @@ bool PagedMemoryManager::accessMemory(
 			_freeSwapAreaPages.erase(_freeSwapAreaPages.begin());
 
 			//swap in the new page
-			_frames.emplace_back(lruPage.frameNumber, pageNumber, pcb);
-			_frames.pop_front();
+			pageTableEntry.pageNumber = lruPage->frameNumber;
+			lruPage->owner = pcb;
+			lruPage->pageNumber = pageNumber;
+			_frames.splice(_nextToAllocate, _frames, lruPage);
+			//no need to reset _frameLocator
 		}
+		pageTableEntry.inMemory = true;
 	}
 	else
 	{
 		//move the accessed frame to the end of _frames.
 		auto frame = _frameLocator[pageTableEntry.pageNumber];
 		_frames.splice(_nextToAllocate, _frames, frame);
-		//reset _frameLocator
-		_frameLocator[pageTableEntry.pageNumber] = --_frames.end();
+		//no need to reset _frameLocator
 	}
 
 	return true;
@@ -238,6 +247,6 @@ void PagedMemoryManager::printMemoryStatistics()
 		cout << frame->frameNumber << "(" << frame->owner->pid << ")" << "->";
 		frame++;
 	}
-	cout << "End" << endl;
+	cout << "None" << endl;
 }
 

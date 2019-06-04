@@ -55,6 +55,7 @@ void parseCommand(istringstream& command, shared_ptr<PCB> pcb)
 	else if (op == "fm")
 	{
 		command >> var;
+		memoryManager->printPagedMemoryInProcess(pcb);
 		succ = memoryManager->virtualFree(pcb, pcb->allocatedMemory[var]);
 		cout << "Freeing Memory Succeed: " << succ << endl;
 		memoryManager->printMemoryStatistics();
@@ -63,6 +64,7 @@ void parseCommand(istringstream& command, shared_ptr<PCB> pcb)
 	{
 		cout << "Unrecognized command: " << op << endl;
 	}
+	memoryManager->printPagedMemoryInProcess(pcb);
 }
 
 void testSingle(shared_ptr<PCB> pcb)
