@@ -27,7 +27,10 @@ public:
 		return _parent.lock();
 	}
 	std::string getPath() {
-		return _path;
+		if (_path == "")
+			return _name;
+		else
+			return _path + '/' + _name;
 	}
 	std::string getContent() {
 		return _content;
@@ -59,7 +62,7 @@ public:
 		return _type == kFile;
 	}
 	void append(std::string apc) {
-		_content += "\n" + apc;
+		_content += apc;
 	}
 
 	//add its and all its forefathers' _lockCount
@@ -149,8 +152,10 @@ bool FileSystem::INode::addChild(const string& name, const std::string& fpath, c
 
 bool FileSystem::INode::eraseChild(const string& name) {
 	for (_itr_node = _children.begin(); _itr_node != _children.end(); _itr_node++) {
-		if ((*_itr_node)->_name == name)
+		if ((*_itr_node)->_name == name) {
 			_children.erase(_itr_node);
+			break;
+		}
 	}
 	return true;
 }
@@ -164,12 +169,12 @@ FileSystem::FileSystem()
 	if (!fs::exists("root")) {
 		fs::create_directory("root");
 		_absoluteRootPath = fs::path("root");
-		_root = std::shared_ptr<INode>(new INode("root", _absoluteRootPath.generic_string(), kDirectory));
+		_root = std::shared_ptr<INode>(new INode("root", "", kDirectory));
 		_workingDirectory = _root;
 	}
 	else {
 		_absoluteRootPath = fs::path("root");
-		_root = std::shared_ptr<INode>(new INode("root", _absoluteRootPath.generic_string(), kDirectory));
+		_root = std::shared_ptr<INode>(new INode("root", "", kDirectory));
 		_workingDirectory = _root;
 		_root->buildDirectories(_absoluteRootPath, _workingDirectory);
 	}
@@ -213,8 +218,9 @@ std::vector<std::string> FileSystem::list()
 std::future<bool> FileSystem::createFile(const std::string& name, const std::string& content)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
-
-	CreateFileParams param = { name, _workingDirectory->getPath() + "/" + name, content };
+	CreateFileParams param;
+	
+	param = { name, _workingDirectory->getPath(), content };
 	IORequestPacket packet = { kCreateFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
@@ -226,11 +232,12 @@ std::future<bool> FileSystem::createFile(const std::string& name, const std::str
 	return fuObj;
 }
 
+// nodicard
 std::future<bool> FileSystem::appendFile(const std::string& name, const std::string& content)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	
-	AppendFileParams param = { name, content, _workingDirectory->getPath() + "/" + name };
+	AppendFileParams param = { name, content, _workingDirectory->getPath()};
 	IORequestPacket packet = { kAppendFile, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
@@ -246,7 +253,7 @@ std::string FileSystem::loadFile(std::string name)
 {
 	_itr_node = _workingDirectory->getChildren();
 	bool ifexist = false;
-	for (; _itr_node != _workingDirectory->getChildren_end(); _itr_node++) {
+	for ( ; _itr_node != _workingDirectory->getChildren_end(); _itr_node++) {
 		if ((*_itr_node)->getName() == name) 
 			return (*_itr_node)->getContent();
 	}
@@ -256,8 +263,10 @@ std::string FileSystem::loadFile(std::string name)
 std::future<bool> FileSystem::createDirectory(const std::string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
+	CreateDirectoryParams param;
+	
+	param = { name, _workingDirectory->getPath() };
 
-	CreateDirectoryParams param = { name, _workingDirectory->getPath() + "/" + name };
 	IORequestPacket packet = { kMakeDirectory, param };
 	packet.workingDirectory = std::shared_ptr(_workingDirectory);
 	std::promise<bool> proObj;
@@ -270,7 +279,7 @@ std::future<bool> FileSystem::createDirectory(const std::string& name)
 	return fuObj;
 }
 
-
+// nodicard
 std::future<bool> FileSystem::removeFile(const std::string& name)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
@@ -284,12 +293,12 @@ std::future<bool> FileSystem::removeFile(const std::string& name)
 		}
 	}
 	if (tempptr->getLockCount() > 0 && !ifexist) {
-		std::future<bool> result = std::async(std::launch::async, []() {
-			return false;
-			});
+		std::promise<bool> proObj;
+		std::future<bool> fuObj = proObj.get_future();
+		proObj.set_value(false);
 		lck.unlock();
 		_condition.notify_all();
-		return result;
+		return fuObj;
 	}
 
 	RemoveFileParams param = { name, _workingDirectory->getPath() };
@@ -304,6 +313,7 @@ std::future<bool> FileSystem::removeFile(const std::string& name)
 	return fuObj;
 }
 
+// nodicard
 std::future<bool> FileSystem::rename(const std::string& oldname, const std::string& newname)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
@@ -413,7 +423,15 @@ void FileSystem::threadFunc()
 				if (!ifexist) {
 					request.first.workingDirectory->addChild(param.name, param.fpath, request.first.method, request.first.workingDirectory, param.content);
 					request.second.set_value(true);
-					std::ofstream(param.fpath);
+
+					std::fstream outfile;
+					outfile.open(param.fpath + '/' + param.name, ios::out);
+					outfile << param.content;
+					if (outfile.is_open())
+						outfile << param.content;
+					else
+						cout << "open fail!" << endl;
+					outfile.close();
 				}
 			}
 			else if (request.first.method == kDeleteFile) {
@@ -422,10 +440,11 @@ void FileSystem::threadFunc()
 				bool ifdel = true;
 				for (; _itr_node != request.first.workingDirectory->getChildren_end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name) {
+						cout << "rm file" << endl;
 						request.first.workingDirectory->eraseChild(param.name);
+						fs::remove_all(param.fpath + '/' + param.name);
 						request.second.set_value(true);
 						ifdel = false;
-						fs::remove_all(param.fpath);
 						break;
 					}
 				}
@@ -450,7 +469,8 @@ void FileSystem::threadFunc()
 				if (!ifexist) {
 					request.first.workingDirectory->addChild(param.name, param.fpath, request.first.method, request.first.workingDirectory);
 					request.second.set_value(true);
-					fs::create_directories(param.fpath);
+					cout << param.fpath  << endl;
+					fs::create_directories(param.fpath + '/' + param.name);
 				}
 				
 			}
@@ -480,6 +500,16 @@ void FileSystem::threadFunc()
 				for (; _itr_node != request.first.workingDirectory->getChildren_end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name && (*_itr_node)->iftxt()) {
 						(*_itr_node)->append(param.content);
+
+						// append file local
+						std::fstream outfile;
+						fs::path filepath = param.fpath + '/' + param.name;
+						cout << filepath << endl;
+						outfile.open(filepath, ios::app);
+						if (outfile.is_open())
+							outfile << param.content;
+						outfile.close();
+
 						ifexist = true;
 						break;
 					}
