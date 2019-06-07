@@ -21,7 +21,7 @@ public:
 
 private:
 	void threadFunc();
-	bool ParseAndDoDirective(const std::string& directive);
+	bool ParseAndDoDirective(const std::string& directive, uint16_t file_ptr);
 
 	struct IOChannel
 	{

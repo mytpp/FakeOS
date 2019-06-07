@@ -55,6 +55,9 @@ public:
 		this->endPtr->followPointer = new ScheduleQueue::PCBNode;
 		this->endPtr->followPointer->_value = newProcess;
 		this->endPtr = this->endPtr->followPointer;
+		if (this->num == 0) {
+			this->startPtr = this->endPtr;
+		}
 		this->num++;
 	}
 	std::shared_ptr<ScheduleQueue::PCB> popProcess() {
@@ -65,6 +68,7 @@ public:
 		}
 		else {
 			this->startPtr = this->startPtr->followPointer;
+			this->num--;
 			return tmpPtr->_value;
 		}
 	}
@@ -81,7 +85,7 @@ public:
 		}
 	}
 	ScheduleQueue::PCBNode* getPCBNode(int seq) {
-		if (this->num < seq) {
+		if (this->num <= seq) {
 			return nullptr;
 		}
 		else {
@@ -111,7 +115,6 @@ public:
 		kDyanmic
 	};
 	std::shared_ptr<ScheduleQueue::PCB> getRunningProcess() {
-		this->ProcessSchedule();
 		return ReadyQueue.front();
 	}
 	ProcessScheduler(Method method = kPriority);
@@ -123,7 +126,7 @@ public:
 	void CreateProcess(std::shared_ptr<ScheduleQueue::PCB> newProcess);
 	void start();
 	void quit();
-
+	void printProcess();
 	void wakeUp();
 
 private:
@@ -131,10 +134,12 @@ private:
 	PCBQueue WaitingQueue;
 	PCBQueue NewlyCreatedQueue;
 	void threadFunc();
-	void ProcessSchedule();
+	void ProcessSchedule_Preemptive();
+	void ProcessSchedule_Nonpreem();
 	void ProcessResort_FCFS();
 	void ProcessResort_TimeSlice();
-
+	void ProcessResort_SJF();
+	void ProcessResort_HRRN();
 	Method _scheduleMethod;
 
 	std::atomic<bool> _waken;

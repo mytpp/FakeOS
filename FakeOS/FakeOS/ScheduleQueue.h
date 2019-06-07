@@ -63,6 +63,9 @@ namespace ScheduleQueue
 	{
 		//process's name can be extracted from path
 		std::string path; //28
+		uint16_t file_ptr;
+		std::string restCode;
+		uint16_t predictedCount;
 		//use std::string because we don't know the exact size at compile time
 		uint16_t pid; //2
 		State state;  //1
@@ -83,7 +86,7 @@ namespace ScheduleQueue
 	
 	
 	//load process into newlyCreatedQueue
-	void LoadProcess(const std::string& path);
+	void LoadProcess(const std::string& path, uint16_t file_ptr);
 
 
 	//Didn't encapsulate a thread-safe Queue, because it's to hard to predicate

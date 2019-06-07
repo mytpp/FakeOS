@@ -10,7 +10,7 @@ using namespace std;
 using namespace kernel;
 
 
-ProcessScheduler ScheduleSystem;
+
 
 CPUCore::CPUCore()
 	:_quit(false)
@@ -47,13 +47,25 @@ void CPUCore::threadFunc()
 		
 		{//critical section
 			scoped_lock lock(ScheduleQueue::readyQueueMutex);
-			if (ScheduleSystem.getRunningProcess() == NULL) {
+			if (processScheduler->getRunningProcess() == NULL) {
 				return;
 			}
 			else {
-				ScheduleSystem.getRunningProcess()->programCounter--;
-				if (ScheduleSystem.getRunningProcess()->programCounter == 0) {
-					ParseAndDoDirective(ScheduleSystem.getRunningProcess()->path);
+				processScheduler->getRunningProcess()->programCounter--;
+				if (processScheduler->getRunningProcess()->programCounter == 0) {
+					string tmpStr = processScheduler->getRunningProcess()->restCode.substr(2,processScheduler->getRunningProcess()->restCode.find('\n'));
+					if (processScheduler->getRunningProcess()->restCode.find('\n') == processScheduler->getRunningProcess()->restCode.npos || 
+						processScheduler->getRunningProcess()->restCode.find('\n') == processScheduler->getRunningProcess()->restCode.length() - 1) {
+						processScheduler->getRunningProcess()->state = ScheduleQueue::kTerminated;
+						/*All demands have been done, so the process should be terminated*/
+					}
+					else {
+						int index = processScheduler->getRunningProcess()->restCode.find('\n');
+						processScheduler->getRunningProcess()->restCode = processScheduler->getRunningProcess()->restCode.substr(index + 1, processScheduler->getRunningProcess()->restCode.length() - 1);
+						processScheduler->getRunningProcess()->programCounter = processScheduler->getRunningProcess()->restCode.at(0);
+					}
+					processScheduler->getRunningProcess()->state = ScheduleQueue::kReady;
+					ParseAndDoDirective(tmpStr, processScheduler->getRunningProcess()->file_ptr);
 				}
 			}
 			//peek the top element of kernel::readyQueue
@@ -78,7 +90,7 @@ void CPUCore::threadFunc()
 	}
 }
 
-bool CPUCore::ParseAndDoDirective(const string& directive)
+bool CPUCore::ParseAndDoDirective(const string& directive, uint16_t file_ptr)
 {
 	//interact with MemoryAllocator and FileSystem
 	//code here...

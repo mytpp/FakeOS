@@ -17,7 +17,7 @@ class FileSystem::INode
 {
 public:
 	INode(string name, std::string fpath, ftype type, std::string content);
-	
+
 	~INode();
 	void buildDirectories(fs::path fpath, std::shared_ptr<INode> pa);
 	bool addChild(const string& name, const std::string& fpath, const Method& type, std::shared_ptr<INode> pa, const string& content = "");
@@ -90,7 +90,7 @@ private:
 	std::list<shared_ptr<INode>>::iterator _itr_node;
 };
 
-FileSystem::INode::INode(string name, std::string fpath, ftype type, std::string content="")
+FileSystem::INode::INode(string name, std::string fpath, ftype type, std::string content = "")
 	:_name(std::move(name)), _path(std::move(fpath)), _type(std::move(type)), _content(std::move(content))
 {
 }
@@ -128,7 +128,7 @@ void FileSystem::INode::buildDirectories(fs::path fpath, std::shared_ptr<INode> 
 
 			if (infile.is_open()) {
 				while (getline(infile, content_line))
-					content += content_line + "\n";		
+					content += content_line + "\n";
 			}
 			else
 				cout << "not open" << endl;
@@ -298,7 +298,7 @@ std::string FileSystem::loadFile(std::string name, const int& pno)
 		}
 	}
 	else {
-		
+
 		for (_itr_fp = _processFptrList.begin(); _itr_fp != _processFptrList.end(); _itr_fp++) {
 			if ((*_itr_fp).No == pno) {
 				_itr_node = (*_itr_fp).processWorkingDirct->getChildren();
@@ -312,7 +312,7 @@ std::string FileSystem::loadFile(std::string name, const int& pno)
 	return "no file";
 }
 
-std::future<bool> FileSystem::createDirectory(const std::string& name,const int& pno)
+std::future<bool> FileSystem::createDirectory(const std::string& name, const int& pno)
 {
 	std::unique_lock<std::mutex> lck(_mutex);
 	CreateDirectoryParams param = { name };//, _workingDirectory->getPath() };
@@ -338,7 +338,7 @@ std::future<bool> FileSystem::createDirectory(const std::string& name,const int&
 
 	lck.unlock();
 	_condition.notify_all();
-	
+
 	return fuObj;
 }
 
@@ -462,12 +462,12 @@ int FileSystem::allocateFptr(const int& curNo)
 {
 	ProcessNum++;
 	filePtr newfp = { ProcessNum };
-	if (curNo == 0) 	
+	if (curNo == 0)
 		newfp.processWorkingDirct = std::shared_ptr(_workingDirectory);
 	else
 	{
 		for (_itr_fp = _processFptrList.begin(); _itr_fp != _processFptrList.end(); _itr_fp++) {
-			if ((*_itr_fp).No == curNo) 
+			if ((*_itr_fp).No == curNo)
 				newfp.processWorkingDirct = std::shared_ptr((*_itr_fp).processWorkingDirct);
 		}
 	}
@@ -477,27 +477,27 @@ int FileSystem::allocateFptr(const int& curNo)
 
 void FileSystem::threadFunc()
 {
-	
+
 	while (!_quit)
 	{
 		std::pair<IORequestPacket, std::promise<bool>> request;
-		
+
 		//retrive a new IO request, sleep if there is no IO request
 		{ //critical section, better make it smaller
 
-			
+
 			unique_lock<std::mutex> lock(_mutex);
 			_condition.wait(lock, [this] { return !_messageQueue.empty(); });
 
 			request = std::move(_messageQueue.front());
-		
+
 			if (request.first.method == kCreateFile) {
 				CreateFileParams param = std::get<CreateFileParams>(request.first.params);
 				cout << "-----------";
 				cout << param.content << endl;
 				_itr_node = request.first.workingDirectory->getChildren();
 				bool ifexist = false;
-				for ( ; _itr_node != request.first.workingDirectory->getChildren_end(); _itr_node++) {
+				for (; _itr_node != request.first.workingDirectory->getChildren_end(); _itr_node++) {
 					if ((*_itr_node)->getName() == param.name) {
 						request.second.set_value(false);
 						ifexist = true;
@@ -553,9 +553,9 @@ void FileSystem::threadFunc()
 					request.second.set_value(true);
 					fs::create_directories(param.fpath + '/' + param.name);
 				}
-				
+
 			}
-			
+
 			else if (request.first.method == kAppendFile) {
 				AppendFileParams param = std::get<AppendFileParams>(request.first.params);
 				_itr_node = request.first.workingDirectory->getChildren();
@@ -577,7 +577,8 @@ void FileSystem::threadFunc()
 					}
 				}
 				request.second.set_value(ifexist);
-;			}
+				;
+			}
 			_messageQueue.pop();
 			lock.unlock();
 			_condition.notify_all();

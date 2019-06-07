@@ -1,0 +1,18 @@
+﻿  CPUCore.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(63,77): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(138,33): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  Kernel.cpp
+  Main.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(148,13): warning C4834:  放弃具有 "nodiscard" 属性的函数的返回值
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(21,29): warning C4267:  “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(58,58): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(85,55): warning C4267:  “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(112,55): warning C4267:  “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(123,15): warning C4834:  放弃具有 "nodiscard" 属性的函数的返回值
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(134,15): warning C4834:  放弃具有 "nodiscard" 属性的函数的返回值
+  ProcessScheduler.cpp
+  ScheduleQueue.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(144,15): warning C4834:  放弃具有 "nodiscard" 属性的函数的返回值
+  正在生成代码...
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ScheduleQueue.cpp(641,38): warning C4267:  “初始化”: 从“size_t”转换到“uint16_t”，可能丢失数据
+  FakeOS.vcxproj -> D:\FakeOS\FakeOS-master\FakeOS\x64\Debug\FakeOS.exe
