@@ -34,45 +34,58 @@ public:
 	//bool changeDirectory(const std::string& path);	
 
 	//ls
-	std::vector<std::string> list();
+	std::vector<std::string> list(const int& pno=0);
 
 	//functions below call _condition.notify() at the end
 
 	//create a file at current directory
-	[[nodiscard]] 
 	std::future<bool> createFile(
 		const std::string& name, 
-		const std::string& content);
+		const std::string& content,
+		const int& pno=0);
 
 	//append some content to a file
 	[[nodiscard]]
 	std::future<bool> appendFile(
 		const std::string& name,
-		const std::string& content);
+		const std::string& content,
+		const int& pno=0);
 
 	//open a .txt file in command line
-	std::string loadFile(std::string name);
+	std::string loadFile(
+		std::string name,
+		const int& pno=0);
 	//create a directory at current directory
 	[[nodiscard]]
-	std::future<bool> createDirectory(const std::string& name);
-	//void createDirectory(const std::string& name);
+	std::future<bool> createDirectory(
+		const std::string& name,
+		const int& pno=0);
 
 	//delete a file at current directory
 	[[nodiscard]]
-	std::future<bool> removeFile(const std::string& name); 
+	std::future<bool> removeFile(
+		const std::string& name,
+		const int& pno=0);
 		
-	std::future<bool> rename(const std::string& oldname, const std::string& newname);
+	//std::future<bool> rename(const std::string& oldname, const std::string& newname);
 	//std::future<bool> copyFile();
 	//std::future<bool> copyDirectory();
 
 	//cd ..
-	std::future<bool> back();
+	std::future<bool> back(const int& pno=0);
 	//cd
-	std::future<bool> load(const std::string &name);
+	std::future<bool> load(
+		const std::string &name,
+		const int& pno=0);
 	//
-	std::string nowpath();
+	std::string nowpath(const int& pno=0);
+
+	// allocate file pointer for process
+	int allocateFptr(const int& curNo=0);
+
 
 private:
+
 	void threadFunc();
 
 	class INode; //forward declaration
@@ -85,12 +98,15 @@ private:
 		kRename,
 		kAppendFile
 	};
-
+	struct filePtr {
+		int No;
+		std::shared_ptr<INode> processWorkingDirct;
+	};
 	struct CreateFileParams
 	{
 		std::string name;
-		std::string fpath;
 		std::string content;
+		std::string fpath;
 	};
 	struct CreateDirectoryParams
 	{
@@ -141,5 +157,8 @@ private:
 	std::atomic<bool> _quit;
 	kernel::ThreadPtr _thread;
 	std::list<std::shared_ptr<INode>>::iterator _itr_node;
+	int ProcessNum;
+	std::list<filePtr> _processFptrList;
+	std::list<filePtr>::iterator _itr_fp;
 };
 
