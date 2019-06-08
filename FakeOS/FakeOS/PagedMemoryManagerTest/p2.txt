@@ -1,0 +1,17 @@
+0 dm 102400 as p1  #7 pages
+0 am p1 4
+1 dm 204800 as p2  #13 pages
+1 am p2 10
+0 am p1 1
+2 dm 256000 as p3 #16 pages
+3 dm 256000 as p4 #16 pages
+4 dm 256000 as p5 #16 pages
+5 dm 256000 as p6 #16 pages
+5 am p6 0
+0 fm p1
+4 am p5 14
+1 fm p2
+2 fm p3
+3 fm p4
+4 fm p5
+5 fm p6
