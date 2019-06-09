@@ -34,65 +34,65 @@ public:
 	//bool changeDirectory(const std::string& path);	
 
 	//ls
-	std::vector<std::string> list(const int& pno = 0);
+	std::vector<std::string> list(const int& pno=0);
 
 	//functions below call _condition.notify() at the end
 
 	//create a file at current directory
 	std::future<bool> createFile(
-		const std::string& name,
+		const std::string& name, 
 		const std::string& content,
-		const int& pno = 0);
+		const int& pno=0);
 
 	//append some content to a file
 	[[nodiscard]]
 	std::future<bool> appendFile(
 		const std::string& name,
 		const std::string& content,
-		const int& pno = 0);
+		const int& pno=0);
 
 	//open a .txt file in command line
 	std::string loadFile(
 		std::string name,
-		const int& pno = 0);
+		const int& pno=0);
 	//create a directory at current directory
 	[[nodiscard]]
 	std::future<bool> createDirectory(
 		const std::string& name,
-		const int& pno = 0);
+		const int& pno=0);
 
 	//delete a file at current directory
 	[[nodiscard]]
 	std::future<bool> removeFile(
 		const std::string& name,
-		const int& pno = 0);
-
+		const int& pno=0);
+		
 	//std::future<bool> rename(const std::string& oldname, const std::string& newname);
 	//std::future<bool> copyFile();
 	//std::future<bool> copyDirectory();
 
 	//cd ..
-	std::future<bool> back(const int& pno = 0);
+	std::future<bool> back(const int& pno=0);
 	//cd
 	std::future<bool> load(
-		const std::string& name,
-		const int& pno = 0);
+		const std::string &name,
+		const int& pno=0);
 	//
-	std::string nowpath(const int& pno = 0);
+	std::string nowpath(const int& pno=0);
 
 	// allocate file pointer for process
-	int allocateFptr(const int& curNo = 0);
-
+	int allocateFptr(const int& curNo=0);
+	void killFptr(const int& curNo);
 
 private:
 
 	void threadFunc();
 
 	class INode; //forward declaration
-
-	enum Method : uint8_t
+	
+	enum Method: uint8_t
 	{
-		kCreateFile,
+		kCreateFile	,
 		kDeleteFile,
 		kMakeDirectory,
 		kRename,
@@ -131,7 +131,7 @@ private:
 		std::string fpath;
 	};
 
-	struct IORequestPacket
+	struct IORequestPacket	
 	{
 		Method method;	//type of request 
 		std::variant <
@@ -143,7 +143,7 @@ private:
 		> params;
 		std::shared_ptr<INode> workingDirectory;	//	parent path
 	};
-
+	
 
 	fs::path _absoluteRootPath;
 	std::shared_ptr<INode> _root;
