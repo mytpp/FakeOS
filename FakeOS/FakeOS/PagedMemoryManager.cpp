@@ -16,15 +16,14 @@ PagedMemoryManager::PagedMemoryManager()
 	,_freeMemoryPagesNum(kMemoryPages)
 	//,_frameLocator()
 	//, _freeSwapAreaPagesNum(kSwapAreaPages)
-	//,_freeSwapAreaPages()
+	,_freeSwapAreaPages(kSwapAreaPages)
 {
 	for (size_t i = 0; i < kMemoryPages; i++)
 		_frames.emplace_back(i, 0, nullptr);
 	_nextToAllocate = _frames.begin();
 	//for (auto frameIt=_frames.begin(); frameIt!=_frames.end(); frameIt++)
 	//	_frameLocator[(*frameIt).frameNumber] = frameIt;
-	for (size_t i = 0; i < kSwapAreaPages; i++)
-		_freeSwapAreaPages.insert(i + kMemoryPages);
+	iota(_freeSwapAreaPages.begin(), _freeSwapAreaPages.end(), kMemoryPages);
 }
 
 PagedMemoryManager::~PagedMemoryManager() = default;
@@ -117,13 +116,13 @@ bool PagedMemoryManager::virtualAllocate(
 		auto& pageTableEntry = pageTable[toAllocate];
 
 		//update pcb's page table
-		pageTableEntry.pageNumber = *(_freeSwapAreaPages.begin());
+		pageTableEntry.pageNumber = _freeSwapAreaPages.front();
 		pageTableEntry.free = false;
 		pageTableEntry.isBegin = false;
 		pageTableEntry.isEnd = false;
 		pageTableEntry.inMemory = false;
 
-		_freeSwapAreaPages.erase(_freeSwapAreaPages.begin());
+		_freeSwapAreaPages.pop_front();
 		toAllocate++;
 		pagesNeeded--;
 	}
@@ -157,11 +156,12 @@ bool PagedMemoryManager::virtualFree(
 			_frames.splice(_nextToAllocate, _frames, frame);
 			_nextToAllocate = frame;
 			_frameLocator.erase(frame->frameNumber);
+			frame->owner = nullptr;
 			_freeMemoryPagesNum++;
 		}
 		else //pageTable[i] in swap area
 		{
-			_freeSwapAreaPages.insert(pageTable[i].pageNumber);
+			_freeSwapAreaPages.push_back(pageTable[i].pageNumber);
 		}
 	} while (!pageTable[i].isEnd);
 
@@ -186,7 +186,7 @@ bool PagedMemoryManager::accessMemory(
 	scoped_lock lock(_mutex);
 	if (!pageTableEntry.inMemory)
 	{   //not in memory
-		_freeSwapAreaPages.insert(pageTableEntry.pageNumber);
+		_freeSwapAreaPages.push_back(pageTableEntry.pageNumber);
 		if (_nextToAllocate != _frames.end())
 		{   //memory is not full
 			_frameLocator[_nextToAllocate->frameNumber] = _nextToAllocate;
@@ -205,8 +205,8 @@ bool PagedMemoryManager::accessMemory(
 			assert(anotherPageTableEntry.free == false);
 			anotherPageTableEntry.inMemory = false;
 			assert(!_freeSwapAreaPages.empty());
-			anotherPageTableEntry.pageNumber = *_freeSwapAreaPages.begin();
-			_freeSwapAreaPages.erase(_freeSwapAreaPages.begin());
+			anotherPageTableEntry.pageNumber = _freeSwapAreaPages.front();
+			_freeSwapAreaPages.pop_front();
 
 			//swap in the new page
 			pageTableEntry.pageNumber = lruPage->frameNumber;

@@ -1,23 +1,32 @@
 ﻿  CPUCore.cpp
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(63,77): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(138,33): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(23,29): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(78,77): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(188,57): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(203,54): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(208,54): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(257,54): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(276,54): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(287,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(298,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
   FileSystem.cpp
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(148,13): warning C4834:  放弃具有 "nodiscard" 属性的函数的返回值
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(148,13): warning C4834: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp: warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(307,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(307,14): warning C4834: C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp: warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
   Kernel.cpp
   MemoryManager.cpp
   PagedMemoryManager.cpp
   ProcessScheduler.cpp
   ScheduleQueue.cpp
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(124,44): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp(124,44): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\ScheduleQueue.cpp(642,38): warning C4267:  'initializing': conversion from 'size_t' to 'uint16_t', possible loss of data
   SegmentedMemoryManager.cpp
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ScheduleQueue.cpp(643,38): warning C4267:  “初始化”: 从“size_t”转换到“uint16_t”，可能丢失数据
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(38,70): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(40,59): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\ScheduleQueue.cpp(648,10): warning C4477:  'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\SegmentedMemoryManager.cpp(38,70): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\SegmentedMemoryManager.cpp(40,59): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
   MainMemoryTest.cpp
-D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(106,96): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
-  正在生成代码...
-D:\FakeOS\FakeOS-master\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101:  “succ”: 未引用的局部变量
-D:\FakeOS\FakeOS-master\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(475) : warning C4715: “FileSystem::nowpath”: 不是所有的控件路径都返回值
-D:\FakeOS\FakeOS-master\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(234) : warning C4715: “FileSystem::list”: 不是所有的控件路径都返回值
-  PagedMemoryManagerTest.vcxproj -> D:\FakeOS\FakeOS-master\FakeOS\x64\Debug\PagedMemoryManagerTest.exe
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\SegmentedMemoryManager.cpp(106,96): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+C:\Users\yourt\source\repos\FakeOS\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101:  'succ': unreferenced local variable
+C:\Users\yourt\source\repos\FakeOS\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp(234) : warning C4715: 'FileSystem::list': not all control paths return a value
+C:\Users\yourt\source\repos\FakeOS\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp(475) : warning C4715: 'FileSystem::nowpath': not all control paths return a value
+  LINK : C:\Users\yourt\source\repos\FakeOS\FakeOS\x64\Debug\PagedMemoryManagerTest.exe not found or not built by the last incremental link; performing full link
+  PagedMemoryManagerTest.vcxproj -> C:\Users\yourt\source\repos\FakeOS\FakeOS\x64\Debug\PagedMemoryManagerTest.exe

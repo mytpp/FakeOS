@@ -59,6 +59,6 @@ private:
 	std::unordered_map<size_t, std::list<PageInfoEntry>::iterator> _frameLocator;
 	
 	//size_t _freeSwapAreaPagesNum; //==_freeSwapAreaPages.size() at most time
-	std::unordered_set<size_t> _freeSwapAreaPages;
+	std::list<size_t> _freeSwapAreaPages;
 };
 
