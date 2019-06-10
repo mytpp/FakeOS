@@ -68,12 +68,12 @@ public:
 	//add its and all its forefathers' _lockCount
 	void lockNodePath() {
 		_lockCount += 1;
-		if (_path != "root")
+		if (_name != "root")
 			_parent.lock()->lockNodePath();
 	}
 	void unlockNodePath() {
 		_lockCount -= 1;
-		if (_path != "root")
+		if (_name != "root")
 			_parent.lock()->unlockNodePath();
 	}
 	void lockNode() {
