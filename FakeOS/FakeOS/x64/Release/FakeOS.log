@@ -1,0 +1,318 @@
+﻿  CPUCore.cpp
+  class template variant is only available with C++17 or later.
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,21): error C2039:  “filesystem”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,31): error C2878:  “filesystem”: 该名称的命名空间或类不存在
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(48,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(59,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(65,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,8): error C2039:  “variant”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C2143:  语法错误: 缺少“;”(在“<”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(143,11): error C2238:  意外的标记位于“;”之前
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,11): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C3646:  “_absoluteRootPath”: 未知重写说明符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(49,4): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(49,16): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(49,16): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(49,51): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(63,77): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(76,4): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(76,16): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(76,16): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(76,53): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明
+  FileSystem.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(138,33): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(138,33): warning C4267: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp: warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(138,33): warning C4267: class template variant is only available with C++17 or later.
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,21): error C2039:  “filesystem”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,31): error C2878:  “filesystem”: 该名称的命名空间或类不存在
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(48,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(59,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(65,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,8): error C2039:  “variant”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C2143:  语法错误: 缺少“;”(在“<”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(143,11): error C2238:  意外的标记位于“;”之前
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,11): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C3646:  “_absoluteRootPath”: 未知重写说明符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(22,33): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(22,33): error C2061:  语法错误: 标识符“path”
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(112,51): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(112,46): error C2065:  “path”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(112,51): error C2146:  语法错误: 缺少“)”(在标识符“fpath”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(113,1): error C2143:  语法错误: 缺少“;”(在“{”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(113,1): error C2447:  “{”: 缺少函数标题(是否是老式的形式表?)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(179,5): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(179,11): error C3861:  “exists”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(180,23): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(180,7): error C3861:  “create_directory”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(181,3): error C2065:  “_absoluteRootPath”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(181,31): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(181,27): error C3861:  “path”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(186,3): error C2065:  “_absoluteRootPath”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(186,31): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(186,27): error C3861:  “path”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(189,27): error C2065:  “_absoluteRootPath”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(243,44): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(245,17): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(251,46): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(253,19): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(274,44): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(276,17): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(278,51): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(278,16): error C2672:  “std::get”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(278,51): error C2975:  “std::get”:“_Idx”的模板参数无效，应为编译时常量表达式
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\utility(452): message :  参见“std::get”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(283,46): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(285,19): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(335,44): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(337,17): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(343,46): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(345,19): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(368,44): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(370,17): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(376,46): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(378,19): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(437,40): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(449,55): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(482,46): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(487,48): error C2955:  “std::shared_ptr”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\memory(1083): message :  参见“std::shared_ptr”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(521,77): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(521,35): error C2672:  “std::get”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(521,77): error C2975:  “std::get”:“_Idx”的模板参数无效，应为编译时常量表达式
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\utility(452): message :  参见“std::get”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(547,77): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(547,35): error C2672:  “std::get”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(547,77): error C2975:  “std::get”:“_Idx”的模板参数无效，应为编译时常量表达式
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\utility(452): message :  参见“std::get”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(553,21): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(553,11): error C3861:  “remove_all”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(563,87): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(563,40): error C2672:  “std::get”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(563,87): error C2975:  “std::get”:“_Idx”的模板参数无效，应为编译时常量表达式
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\utility(452): message :  参见“std::get”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(580,28): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(580,10): error C3861:  “create_directories”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(586,77): error C2039:  “params”: 不是“FileSystem::IORequestPacket”的成员
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(134): message :  参见“FileSystem::IORequestPacket”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(586,35): error C2672:  “std::get”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(586,77): error C2975:  “std::get”:“_Idx”的模板参数无效，应为编译时常量表达式
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\utility(452): message :  参见“std::get”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(595,16): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(595,11): error C2065:  “path”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(595,16): error C2146:  语法错误: 缺少“;”(在标识符“filepath”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(595,16): error C2065:  “filepath”: 未声明的标识符
+  Kernel.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(596,20): error C2065:  “filepath”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(596,20): error C2065: class template variant is only available with C++17 or later.
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,21): error C2039:  “filesystem”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,31): error C2878:  “filesystem”: 该名称的命名空间或类不存在
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(48,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(59,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(65,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,8): error C2039:  “variant”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C2143:  语法错误: 缺少“;”(在“<”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(143,11): error C2238:  意外的标记位于“;”之前
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,11): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C3646:  “_absoluteRootPath”: 未知重写说明符
+  Main.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430: class template variant is only available with C++17 or later.
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,21): error C2039:  “filesystem”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,31): error C2878:  “filesystem”: 该名称的命名空间或类不存在
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(48,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(59,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(65,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,8): error C2039:  “variant”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C2143:  语法错误: 缺少“;”(在“<”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(143,11): error C2238:  意外的标记位于“;”之前
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,11): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C3646:  “_absoluteRootPath”: 未知重写说明符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430: string_view is only available with C++17 or later.
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(12,33): error C2065:  “string_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(12,46): error C2065:  “sv”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(12,48): error C2182:  “removePrefixedSpace”: 非法使用“void”类型
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(12,13): error C7525:  内联变量至少需要 "/std:c++17"
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(13,1): error C2448:  “removePrefixedSpace”: 函数样式初始值设定项类似函数定义
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(17,8): error C7525:  内联变量至少需要 "/std:c++17"
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(17,36): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(17,20): error C2146:  语法错误: 缺少“;”(在标识符“getNextParameter”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(17,50): error C2065:  “sv”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(17,57): error C2062:  意外的类型“int”
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(18,1): error C2143:  语法错误: 缺少“;”(在“{”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(18,1): error C2447:  “{”: 缺少函数标题(是否是老式的形式表?)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(56,15): error C2146:  语法错误: 缺少“;”(在标识符“command_view”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(56,15): error C3861:  “command_view”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(57,23): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(58,27): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(59,15): error C2146:  语法错误: 缺少“;”(在标识符“commandName”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(59,15): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(59,29): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(61,7): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(68,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(70,16): error C2146:  语法错误: 缺少“;”(在标识符“path”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(70,16): error C2065:  “path”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(70,40): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(70,23): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(71,8): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(72,17): error C2065:  “path”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(76,31): error C2065:  “path”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(82,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(84,16): error C2146:  语法错误: 缺少“;”(在标识符“name”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(84,16): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(84,40): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(84,23): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(85,24): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(86,16): error C2146:  语法错误: 缺少“;”(在标识符“content”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(86,16): error C2065:  “content”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(86,43): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(86,26): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(88,8): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(89,5): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(89,36): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(90,19): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(91,19): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(92,5): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(92,20): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(95,14): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(96,14): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(101,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(103,16): error C2146:  语法错误: 缺少“;”(在标识符“name”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(103,16): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(103,40): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(103,23): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(104,8): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(106,42): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(109,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(111,16): error C2146:  语法错误: 缺少“;”(在标识符“name”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(111,16): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(111,40): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(111,23): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(112,24): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(113,16): error C2146:  语法错误: 缺少“;”(在标识符“content”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(113,16): error C2065:  “content”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(113,43): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(113,26): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(115,8): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(116,5): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(116,36): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(117,19): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(118,19): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(120,5): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(120,20): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(121,21): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(124,14): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(125,14): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(130,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(132,16): error C2146:  语法错误: 缺少“;”(在标识符“name”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(132,16): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(132,40): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(132,23): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(133,8): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(134,41): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(140,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(142,16): error C2146:  语法错误: 缺少“;”(在标识符“name”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(142,16): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(142,40): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(142,23): error C3861:  “getNextParameter”: 找不到标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(143,8): error C2065:  “command_view”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(144,36): error C2065:  “name”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(149,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(151,16): error C2146:  语法错误: 缺少“;”(在标识符“programName”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(151,16): error C2065:  “programName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(151,30): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(152,39): error C2065:  “programName”: 未声明的标识符
+  MemoryManager.cpp
+  PagedMemoryManager.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\Main.cpp(154,12): error C2065:  “commandName”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(52,2): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(52,14): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(52,14): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(52,25): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(149,2): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(149,14): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(149,14): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(149,25): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(186,2): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(186,14): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(186,14): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\PagedMemoryManager.cpp(186,25): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+  ProcessScheduler.cpp
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ProcessScheduler.cpp(388,15): error C2955:  “std::unique_lock”: 使用 类 模板 需要 模板 参数列表
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(125): message :  参见“std::unique_lock”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ProcessScheduler.cpp(388,36): error C2514:  “std::unique_lock”: 无法构建类模板
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(125): message :  参见“std::unique_lock”的声明
+  ScheduleQueue.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ProcessScheduler.cpp(389,66): error C2664:  “void std::condition_variable::wait(std::unique_lock<std::mutex> &)”: 无法将参数 1 从“std::unique_lock”转换为“std::unique_lock<std::mutex> &”
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ProcessScheduler.cpp(389,66): error C2664: class template variant is only available with C++17 or later.
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,21): error C2039:  “filesystem”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(15,31): error C2878:  “filesystem”: 该名称的命名空间或类不存在
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(48,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(59,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(65,4): warning C5051:  属性 "nodiscard" 至少需要 "/std:c++17"；已忽略
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,8): error C2039:  “variant”: 不是“std”的成员
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\experimental\filesystem(30): message :  参见“std”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C2143:  语法错误: 缺少“;”(在“<”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(137,16): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(143,11): error C2238:  意外的标记位于“;”之前
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,11): error C2653:  “fs”: 不是类或命名空间名称
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C3646:  “_absoluteRootPath”: 未知重写说明符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.h(148,28): error C4430:  缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+  SegmentedMemoryManager.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ScheduleQueue.cpp(642,38): warning C4267:  “初始化”: 从“size_t”转换到“uint16_t”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(36,2): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(36,14): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(36,14): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(36,25): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(38,70): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(40,59): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(106,96): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(114,2): error C2065:  “scoped_lock”: 未声明的标识符
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(114,14): error C2146:  语法错误: 缺少“;”(在标识符“lock”的前面)
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(114,14): error C2672:  “lock”: 未找到匹配的重载函数
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(114,25): error C2780:  “void std::lock(_Lock0 &,_Lock1 &,_LockN &...)”: 应输入 3 个参数，却提供了 1 个
+D:\VS2019\VC\Tools\MSVC\14.21.27702\include\mutex(426): message :  参见“std::lock”的声明

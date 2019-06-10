@@ -52,12 +52,12 @@ public:
 		}
 	}
 	void addProcess(std::shared_ptr<ScheduleQueue::PCB> newProcess) {
-		this->endPtr->followPointer = new ScheduleQueue::PCBNode;
-		this->endPtr->followPointer->_value = newProcess;
-		this->endPtr = this->endPtr->followPointer;
+		this->endPtr = new ScheduleQueue::PCBNode;
+		this->endPtr->_value = newProcess;
 		if (this->num == 0) {
 			this->startPtr = this->endPtr;
 		}
+		this->endPtr = this->endPtr->followPointer;
 		this->num++;
 	}
 	std::shared_ptr<ScheduleQueue::PCB> popProcess() {

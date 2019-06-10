@@ -151,6 +151,24 @@ int main()
 			string_view programName = commandName.substr(2);
 			ScheduleQueue::LoadProcess(string{ programName },0);
 		}
+		else if (commandName == "top")
+		{
+			system("cls");//ÇåÆÁ 
+			int count = 0;
+			while (1) {
+				count++;
+				if (count == 10)
+				{
+					count = 0;
+					system("cls");//ÇåÆÁ 
+					processScheduler->printProcess();
+				}
+				if (KEY_DOWN(0x10) && KEY_DOWN('T'))break;
+				Sleep(100);
+			
+			}
+			system("cls");//ÇåÆÁ 
+		}
 		else if (commandName == "q")
 		{
 			cout << "Closing..." << endl;

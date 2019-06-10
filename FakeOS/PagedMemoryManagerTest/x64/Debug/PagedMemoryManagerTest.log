@@ -1,0 +1,23 @@
+﻿  CPUCore.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(63,77): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(138,33): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  FileSystem.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(148,13): warning C4834:  放弃具有 "nodiscard" 属性的函数的返回值
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\CPUCore.cpp(148,13): warning C4834: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp: warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  Kernel.cpp
+  MemoryManager.cpp
+  PagedMemoryManager.cpp
+  ProcessScheduler.cpp
+  ScheduleQueue.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(124,44): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  SegmentedMemoryManager.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\ScheduleQueue.cpp(643,38): warning C4267:  “初始化”: 从“size_t”转换到“uint16_t”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(38,70): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(40,59): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  MainMemoryTest.cpp
+D:\FakeOS\FakeOS-master\FakeOS\FakeOS\SegmentedMemoryManager.cpp(106,96): warning C4267:  “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码...
+D:\FakeOS\FakeOS-master\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101:  “succ”: 未引用的局部变量
+D:\FakeOS\FakeOS-master\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(475) : warning C4715: “FileSystem::nowpath”: 不是所有的控件路径都返回值
+D:\FakeOS\FakeOS-master\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: D:\FakeOS\FakeOS-master\FakeOS\FakeOS\FileSystem.cpp(234) : warning C4715: “FileSystem::list”: 不是所有的控件路径都返回值
+  PagedMemoryManagerTest.vcxproj -> D:\FakeOS\FakeOS-master\FakeOS\x64\Debug\PagedMemoryManagerTest.exe

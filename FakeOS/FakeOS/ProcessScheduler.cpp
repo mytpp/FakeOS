@@ -388,11 +388,11 @@ void ProcessScheduler::threadFunc()
 		unique_lock conditionLock(_mutex);
 		_condition.wait(conditionLock, [this] { return _waken.load(); });
 		
-		scoped_lock queueLock(
+		/*scoped_lock queueLock(
 			ScheduleQueue::newlyCreatedQueueMutex, 
 			ScheduleQueue::readyQueueMutex,
 			ScheduleQueue::waitingQueueMutex
-		);
+		);*/
 		//code here
 		//algorithm for scheduling
 		/*Have no idea know what should be done here.*/

@@ -25,7 +25,7 @@ private:
 
 	struct IOChannel
 	{
-		std::unique_ptr<ScheduleQueue::PCB> pcb;
+		std::shared_ptr<ScheduleQueue::PCB> pcb;
 		std::future<bool> event;
 	};
 

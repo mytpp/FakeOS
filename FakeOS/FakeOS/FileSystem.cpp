@@ -478,6 +478,7 @@ int FileSystem::allocateFptr(const int& curNo)
 {
 	ProcessNum++;
 	filePtr newfp = { ProcessNum };
+	printf("33333");
 	if (curNo == 0) 	
 		newfp.processWorkingDirct = std::shared_ptr(_workingDirectory);
 	else
