@@ -31,5 +31,7 @@ public:
 	virtual void printMemoryStatistics() { }
 
 	static void printPagedMemoryInProcess(std::shared_ptr<ScheduleQueue::PCB> pcb);
+
+	static void printSegmentedMemoryInProcess(std::shared_ptr<ScheduleQueue::PCB> pcb);
 };
 

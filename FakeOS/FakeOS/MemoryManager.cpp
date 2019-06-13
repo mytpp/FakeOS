@@ -26,3 +26,16 @@ void MemoryManager::printPagedMemoryInProcess(std::shared_ptr<ScheduleQueue::PCB
 	if (noFreePage)
 		cout << "None" << endl;
 }
+
+void MemoryManager::printSegmentedMemoryInProcess(std::shared_ptr<ScheduleQueue::PCB> pcb)
+{
+	auto& segmentTable = *(pcb->segmentTable);
+	cout << "Process's (pid=" << pcb->pid << ") allocated memory:" << endl;
+	bool noFreePage = true;
+	for (size_t i = 0; i < segmentTable.size(); i++)
+	{
+		if (segmentTable[i].segmentSize != 0)
+			cout << "segment[" << i << "]:  base#: " << segmentTable[i].base << "  segmentsize" << segmentTable[i].segmentSize << endl;
+	}
+		cout << "None" << endl;
+}

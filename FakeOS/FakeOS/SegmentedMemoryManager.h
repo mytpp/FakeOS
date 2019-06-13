@@ -33,6 +33,8 @@ public:
 	bool accessMemory(
 		std::shared_ptr<ScheduleQueue::PCB> pcb, const size_t segmentNumber, const size_t offset);
 
+	void printMemoryStatistics() override;
+
 	struct MemoryStateEntry
 	{
 		bool free;//available?

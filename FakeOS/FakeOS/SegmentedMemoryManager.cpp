@@ -1,18 +1,22 @@
 #include "SegmentedMemoryManager.h"
 #include "ScheduleQueue.h"
 #include <cassert>
-#include <numeric>
+#include <numeric> 
 #include <iterator>
+#include <iostream>
 
 using namespace std;
 using namespace kernel;
 using namespace ScheduleQueue;
 
-
 SegmentedMemoryManager::SegmentedMemoryManager()
 	:_mutex()
 {
-
+	auto& memoryEntry = memState[0];
+	for (size_t i = 0; i < kernel::kMemoryBlocks; i++)
+	{
+		memState[i].free = true;
+	}
 }
 SegmentedMemoryManager::~SegmentedMemoryManager() = default;
 
@@ -131,4 +135,15 @@ bool SegmentedMemoryManager::accessMemory(
 	auto& segmentTableEntry = (*(pcb->segmentTable))[segmentNumber];
 	if (segmentTableEntry.segmentSize == 0 || segmentTableEntry.segmentSize < offset) return false;//if the segmentsize is zero, this segmentnumber in pcb is free; if the offset is bigger than the segmentsize the access is overstep the boundery
 	return true;
+}
+
+void SegmentedMemoryManager::printMemoryStatistics()
+{
+	auto& memoryEntry = memState[0];
+	for (size_t i = 0; i < kernel::kMemoryBlocks; i++)
+	{
+		if (memState[i].free) cout << "block:  " << i << "   (free)  " << endl;
+		else cout << "block:  " << i << "   (occupied)  " << endl;
+	}
+	cout << "None" << endl;
 }
