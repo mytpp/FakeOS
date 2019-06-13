@@ -625,6 +625,11 @@ namespace ScheduleQueue
 	mutex waitingQueueMutex;
 
 
+	/*******************************************************************************
+	函数名称：:LoadProcess(const std::string& path, uint16_t file_ptr)
+	函数功能: 读脚本并生成对应的pcb
+	参数：
+	*******************************************************************************/
 	void LoadProcess(const std::string& path, uint16_t file_ptr)
 	{
 		//create PCB
@@ -639,32 +644,41 @@ namespace ScheduleQueue
 		}
 		pcb->file_ptr = kernel::fileSystem->allocateFptr(file_ptr);
 		string tmp_str = kernel::fileSystem->loadFile(path, pcb->file_ptr);
+		char* tmp_ptr = tmp_str.data();
+		//printf("%s\n", (char*)tmp_ptr);
 		uint16_t index = tmp_str.find('\n');
 		/*initialize the done code-position*/
 		string priority_line = tmp_str.substr(0, index);
 		pcb->priority = (ScheduleQueue::Priority)(priority_line.at(priority_line.length() - 1) - '0');
-		printf("%d\n", pcb->priority);
+		//printf("%d\n", pcb->priority);
 		pcb->restCode = tmp_str.substr(index + 1);
-		printf("%s\n", pcb->restCode);
+		//printf("%s\n", pcb->restCode);
 		/*ProgramCounter should be set as the first damand's Counter*/
 		/*Predicted Counter could be all the counters' sum*/
 		pcb->predictedCount = 0;
 		string tmpStr = pcb->restCode.substr(0, pcb->restCode.length() - 1);
 
-		for (; tmpStr.length() != 0 && tmpStr.find('\n') != tmpStr.npos; ) {
-			pcb->predictedCount += (uint16_t)(tmpStr.at(0) - '0');
-			tmpStr = tmpStr.substr(tmp_str.find('\n') + 1, tmpStr.length() - 1);
-		}
-		if (tmpStr.length() > 0) {
-			pcb->predictedCount += (uint16_t)(tmpStr.at(0) - '0');
+		for (; tmpStr.find('\n') > 0; ) {
+			char* tmpString = tmpStr.data();
+			//printf("%s\n", tmpString);
+			pcb->predictedCount += std::stoi(tmpStr.substr(0,tmpStr.find(' ')),0,10);
+			//printf("%d\n", pcb->predictedCount);
+			if (tmpStr.length() == 0 || tmpStr.find('\n') == string::npos) {
+				break;
+			}
+			else {
+				tmpStr = tmpStr.substr(tmpStr.find('\n')+1, tmpStr.length());
+			}
 		}
 		pcb->statistics.timeCreated = time_count++;
 		pcb->statistics.usedCPUTime = 0;
 		pcb->path = path;
 		pcb->state = kNew;
-		pcb->programCounter = pcb->restCode.at(0);
+		pcb->programCounter = std::stoi(tmpStr.substr(0, tmpStr.find(' ')), 0, 10);
 		std::unique_lock<std::mutex> lck(newlyCreatedQueueMutex);
+		//printf("11111");
 		kernel::processScheduler->CreateProcess(pcb);
+		//kernel::processScheduler->printProcess();
 		lck.unlock();
 	}
 }

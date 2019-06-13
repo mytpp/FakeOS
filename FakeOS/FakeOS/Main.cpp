@@ -7,7 +7,6 @@
 #include <iostream>
 #include <string_view>
 #include<windows.h>
-
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) 
 
 using namespace std;
@@ -87,6 +86,10 @@ int main()
 			string_view name = getNextParameter(command_view, separatorPosition);
 			separatorPosition = command_view.find_first_of(' ');
 			string_view content = getNextParameter(command_view, separatorPosition);
+			//cout << command_view.size() << endl;
+			//cout << command_view.front() << endl;
+			//cout << command_view.back() << endl;
+
 
 			if (command_view.size() >= 2 &&
 				command_view.front() == '"' && command_view.back() == '"') {
@@ -153,6 +156,7 @@ int main()
 		{
 			string_view programName = commandName.substr(2);
 			ScheduleQueue::LoadProcess(string{ programName },0);
+			//processScheduler->printProcess();
 		}
 		else if (commandName == "top")
 		{

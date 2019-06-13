@@ -52,35 +52,61 @@ void CPUCore::quit()
 	_quit = true;
 }
 
-void CPUCore::threadFunc()
+
+/*******************************************************************************
+函数名称：:threadFunc()
+函数功能: 循环调用拿出第一个准备好的进程，减去对应的时钟，更新，如果到时则执行。
+参数：
+*******************************************************************************/
+void CPUCore::threadFunc() 
 {
 	while (!_quit)
 	{
-		//periodically wake up processScheduler
+		//periodically wake up processScheduler 
+		//cout << "33333";
 		if (_timeElapsed % kScheduleInterval == 0)
 			processScheduler->wakeUp();
 
 		{//critical section
 			//scoped_lock lock(ScheduleQueue::readyQueueMutex);
 			if (processScheduler->getRunningProcess() == NULL) {
-				return;
+				
 			}
 			else {
 				processScheduler->getRunningProcess()->programCounter--;
+				//cout << processScheduler->getRunningProcess()->programCounter;
+				processScheduler->getRunningProcess()->state = ScheduleQueue::kReady;
 				if (processScheduler->getRunningProcess()->programCounter == 0) {
-					string tmpStr = processScheduler->getRunningProcess()->restCode.substr(2, processScheduler->getRunningProcess()->restCode.find('\n'));
+					string tmpStr;
+					if (processScheduler->getRunningProcess()->restCode.find('\n') == processScheduler->getRunningProcess()->restCode.npos ||
+						processScheduler->getRunningProcess()->restCode.find('\n') == processScheduler->getRunningProcess()->restCode.length() - 1) {
+						tmpStr = processScheduler->getRunningProcess()->restCode.substr(processScheduler->getRunningProcess()->restCode.find(' ')+1);
+						//cout << tmpStr;
+						if (tmpStr.back() == '\n') {
+							tmpStr = tmpStr.substr(0, tmpStr.length() - 1);
+						}
+						//cout << tmpStr;
+						ParseAndDoDirective(tmpStr, processScheduler->getRunningProcess()->file_ptr);
+					}
+					else {
+						tmpStr = processScheduler->getRunningProcess()->restCode.substr(processScheduler->getRunningProcess()->restCode.find(' ') + 1,processScheduler->getRunningProcess()->restCode.find('\n')-1);
+						//cout << tmpStr;
+						//cout << tmpStr;
+						if (tmpStr.back() == '\n') {
+							tmpStr = tmpStr.substr(0, tmpStr.length() - 1);
+						}
+						ParseAndDoDirective(tmpStr, processScheduler->getRunningProcess()->file_ptr);
+					}
 					if (processScheduler->getRunningProcess()->restCode.find('\n') == processScheduler->getRunningProcess()->restCode.npos ||
 						processScheduler->getRunningProcess()->restCode.find('\n') == processScheduler->getRunningProcess()->restCode.length() - 1) {
 						processScheduler->getRunningProcess()->state = ScheduleQueue::kTerminated;
 						/*All demands have been done, so the process should be terminated*/
 					}
-					else {
+					else { /*There are still demands needed to be done.*/
 						int index = processScheduler->getRunningProcess()->restCode.find('\n');
 						processScheduler->getRunningProcess()->restCode = processScheduler->getRunningProcess()->restCode.substr(index + 1, processScheduler->getRunningProcess()->restCode.length() - 1);
 						processScheduler->getRunningProcess()->programCounter = processScheduler->getRunningProcess()->restCode.at(0);
 					}
-					processScheduler->getRunningProcess()->state = ScheduleQueue::kReady;
-					ParseAndDoDirective(tmpStr, processScheduler->getRunningProcess()->file_ptr);
 				}
 			}
 			//peek the top element of kernel::readyQueue
@@ -104,7 +130,11 @@ void CPUCore::threadFunc()
 		_timeElapsed++;
 	}
 }
-
+/*******************************************************************************
+函数名称：:ParseAndDoDirective(const string& directive, uint16_t file_ptr)
+函数功能: 进程的执行函数
+参数：
+*******************************************************************************/
 bool CPUCore::ParseAndDoDirective(const string& directive, uint16_t file_ptr)
 {
 	//interact with MemoryAllocator and FileSystem
@@ -256,6 +286,10 @@ bool CPUCore::ParseAndDoDirective(const string& directive, uint16_t file_ptr)
 		string_view name = getNextParameter(command_view, separatorPosition);
 		separatorPosition = command_view.find_first_of(' ');
 		string_view content = getNextParameter(command_view, separatorPosition);
+		//cout << command_view.size() << endl;
+		//cout << command_view.front() << endl;
+		//cout << command_view.back() << endl;
+		//cout << command_view;
 
 		if (command_view.size() >= 2 &&
 			command_view.front() == '"' && command_view.back() == '"') {
