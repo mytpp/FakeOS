@@ -6,6 +6,9 @@
 //#include "Command.h"
 #include <iostream>
 #include <string_view>
+#include<windows.h>
+
+#define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) 
 
 using namespace std;
 using namespace kernel;
