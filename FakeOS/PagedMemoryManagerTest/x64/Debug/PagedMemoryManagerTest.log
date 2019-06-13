@@ -8,15 +8,12 @@ C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(257,54): warning C4
 C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(276,54): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(287,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
 C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(298,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
-  FileSystem.cpp
-C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(307,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
-C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(307,14): warning C4834: C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp: warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
   Kernel.cpp
   MemoryManager.cpp
   PagedMemoryManager.cpp
   ProcessScheduler.cpp
   ScheduleQueue.cpp
-C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp(124,44): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\CPUCore.cpp(307,14): warning C4834:  discarding return value of function with 'nodiscard' attribute
 C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\ScheduleQueue.cpp(642,38): warning C4267:  'initializing': conversion from 'size_t' to 'uint16_t', possible loss of data
   SegmentedMemoryManager.cpp
 C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\ScheduleQueue.cpp(648,10): warning C4477:  'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
@@ -26,7 +23,4 @@ C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\SegmentedMemoryManager.cpp(40,5
 C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\SegmentedMemoryManager.cpp(106,96): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
   Generating Code...
 C:\Users\yourt\source\repos\FakeOS\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101:  'succ': unreferenced local variable
-C:\Users\yourt\source\repos\FakeOS\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp(234) : warning C4715: 'FileSystem::list': not all control paths return a value
-C:\Users\yourt\source\repos\FakeOS\FakeOS\PagedMemoryManagerTest\MainMemoryTest.cpp(90,7): warning C4101: C:\Users\yourt\source\repos\FakeOS\FakeOS\FakeOS\FileSystem.cpp(475) : warning C4715: 'FileSystem::nowpath': not all control paths return a value
-  LINK : C:\Users\yourt\source\repos\FakeOS\FakeOS\x64\Debug\PagedMemoryManagerTest.exe not found or not built by the last incremental link; performing full link
   PagedMemoryManagerTest.vcxproj -> C:\Users\yourt\source\repos\FakeOS\FakeOS\x64\Debug\PagedMemoryManagerTest.exe

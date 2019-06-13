@@ -1,7 +1,0 @@
-dm 102400 as p1  #7pages
-am p1 4
-am p1 1
-fm p1
-
-dm 1024000 as p2 #overflow, return false
-
